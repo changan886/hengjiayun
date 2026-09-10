@@ -23,6 +23,71 @@
 .lock-screen{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 18% 15%,#2f6e5d 0,transparent 30%),linear-gradient(145deg,#0e1b17,#18352c)}.lock-card{width:min(440px,100%);background:#fff;border-radius:14px;padding:30px;border-top:4px solid var(--jade2)}.lock-brand{display:flex;gap:12px;margin-bottom:22px}.lock-card h1{font-size:25px;margin:0}.lock-card p{margin:4px 0;color:var(--muted)}.password-wrap{position:relative}.password-wrap input{padding-right:78px}.password-toggle{position:absolute;right:4px;top:4px;min-height:34px;border:0;background:#edf4f1;padding:5px 9px;color:var(--jade)}.lock-error{min-height:24px;color:var(--red);font-size:13px}.lock-submit{width:100%}.lock-hint{display:block;margin-top:13px;text-align:center;color:var(--muted);font-size:12px}
 .edit-legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;padding:9px 12px;border:1px solid #bfd7ce;border-left:4px solid var(--jade);border-radius:7px;background:#f2f8f5;font-size:13px}.edit-legend svg{color:var(--jade)}.project-open{margin-left:auto}.home-money-action,.core-value,.summary-value,.metric-value,.inline-number,.node-number{width:100%;border:1px solid transparent;border-radius:6px;background:transparent;padding:4px;text-align:left}.home-money-action:hover,.core-value:hover,.summary-value:hover,.metric-value:hover,.inline-number:hover,.node-number:hover{border-color:#7fbaaa;background:#eff8f4}.home-money-action:active,.core-value:active,.summary-value:active,.metric-value:active,.inline-number:active,.node-number:active{background:#dfeee8}.home-money-action span,.home-money-action strong,.home-money-action small,.core-value span,.core-value strong,.core-value small,.summary-value span,.summary-value strong,.summary-value small,.metric-value span,.metric-value strong,.metric-value small{display:block}.home-money-action strong,.core-value strong,.summary-value strong,.metric-value strong{display:flex;justify-content:flex-end;align-items:center;gap:5px}.home-money-action .edit-svg,.core-value .edit-svg,.summary-value .edit-svg,.metric-value .edit-svg{flex:none;color:var(--jade)}.metric{position:relative;padding:7px}.metric-value{min-height:88px}.metric-trace-toggle{width:100%;min-height:28px;border:0;border-top:1px dashed #c7d7d1;background:transparent;color:#31594e;font-size:12px;text-align:center}.metric span,.metric small,.core-kpi span,.core-kpi small{text-align:center}.metric strong,.core-kpi strong{text-align:center}.metric-value strong,.core-value strong,.home-money-action strong,.summary-value strong{display:flex;justify-content:center;align-items:center;gap:5px;text-align:center}.manual-badge{display:inline-flex!important;align-items:center;min-height:20px;margin-top:3px;padding:1px 6px;border:1px solid #71a997;border-radius:999px;color:#145f4d!important;background:#e7f4ef;font-size:11px!important}.manager-note{margin:0 0 12px;color:var(--muted);font-size:13px}.ledger-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.led-kpi{border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;background:#f9fafb}.led-kpi span{display:block;font-size:12px;color:var(--muted)}.led-kpi b{display:block;font-size:19px;margin:4px 0 2px}.led-kpi small{color:var(--muted);font-size:11px}.manager-actions{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px}.inline-number,.node-number{min-width:140px}.inline-number .money-pair,.node-number .money-pair{pointer-events:none}.project-card .money-block{min-width:0}.project-card-body .mini-grid{align-items:stretch}.core-kpi{padding:8px}.core-value{min-height:112px}.summary-value{min-height:78px}.metric-value .edited::after,.core-value .edited::after,.home-money-action .edited::after,.summary-value .edited::after{content:"*";color:var(--jade);margin-left:2px}
 @media(max-width:1100px){.project-grid{grid-template-columns:repeat(2,1fr)}.risk-grid,.core-grid{grid-template-columns:repeat(2,1fr)}.summary-grid,.metric-grid{grid-template-columns:repeat(3,1fr)}.search-grid{grid-template-columns:1fr 1fr}.appbar-context{display:none}}@media(max-width:720px){.page{padding:14px 12px 52px}.appbar-inner{padding:8px 12px}.brand small{display:none}.home-head,.project-grid,.risk-grid,.core-grid,.summary-grid,.metric-grid,.price-stats,.search-grid,.assistant-row{grid-template-columns:1fr}.contract-head,.project-hero-top,.section-head{display:block}.contract-actions{justify-content:flex-start;margin-top:10px}.contract-card.sub,.sub-list-head{margin-left:13px}.trace-row,.answer-row{grid-template-columns:1fr}.trend{margin-left:0;width:100%}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}@media print{.appbar,.toolbar,.contract-actions,.btn,.assistant,.filter-bar,.lock-screen{display:none!important}.page{max-width:none;padding:0}.panel,.contract-card{box-shadow:none;break-inside:avoid}}
+
+/* 多了一个「价格类型」下拉，重排搜索行，避免按钮被挤到第二行 */
+.library-panel .search-grid{grid-template-columns:1fr 150px 140px 130px auto}
+@media(max-width:1100px){.library-panel .search-grid{grid-template-columns:1fr 1fr}}
+.price-stats .stat.is-key{background:var(--greenbg);border-color:var(--green)}
+.price-stats .stat.is-mixed{background:var(--amberbg);border-color:var(--amber);flex:1 1 340px}
+.price-stats .stat.is-mixed strong{font-size:14px;font-weight:400;line-height:1.45;display:block}
+.price-stats .stat.is-key strong small{font-size:12px;color:var(--muted);font-weight:400}
+.type-stats{margin:10px 0 4px}.ts-head{font-size:13px;color:var(--muted);margin-bottom:6px}
+.ts-row{display:flex;flex-wrap:wrap;gap:8px}
+.ts-cell{border:1px solid var(--line);border-radius:8px;padding:7px 12px;background:#fff;min-width:150px}
+.ts-cell span{display:block;font-size:12px;color:var(--muted)}
+.ts-cell strong{display:block;font-size:17px}
+.ts-cell small{display:block;font-size:12px;color:var(--muted)}
+.dev-up{color:var(--red)}.dev-down{color:var(--green)}
+.price-groups{margin:14px 0}
+.pg-card{border:1px solid var(--line);border-radius:9px;background:#fff;margin-bottom:8px;overflow:hidden}
+.pg-card>summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pg-card>summary::-webkit-details-marker{display:none}
+.pg-card>summary:hover{background:var(--paper)}
+.pg-card[open]>summary{border-bottom:1px solid var(--line);background:var(--paper)}
+.pg-name{font-weight:700;min-width:190px;flex:1 1 190px}
+.pg-med{font-size:19px;color:var(--jade);font-weight:700;min-width:130px}
+.pg-med small{font-size:12px;color:var(--muted);font-weight:400}
+.pg-rng{font-size:13px;color:var(--muted);min-width:200px}
+.pg-n{font-size:13px;color:var(--muted);min-width:56px}
+.pg-spark{width:200px;height:44px;flex:0 0 200px}
+.pg-card>div{padding:0 14px 12px}
+.pg-more{font-size:13px;color:var(--muted);margin:6px 2px}
+.spark{width:200px;height:44px;display:block}
+.spark-line{fill:none;stroke:var(--jade2);stroke-width:1.8}
+.spark-area{fill:rgba(41,166,138,.13);stroke:none}
+.spark-dot{fill:var(--jade)}
+.spark-empty{font-size:12px;color:var(--muted)}
+.pv-block{border:1px solid var(--line);border-radius:9px;margin-bottom:10px;background:#fff}
+.pv-block>summary{cursor:pointer;padding:10px 13px;font-size:14px}
+.pv-block>summary:hover{background:var(--paper)}
+.pv-block[open]>summary{border-bottom:1px solid var(--line);background:var(--paper)}
+.pv-block>div,.pv-block>.scroll-shell{padding:0 13px 12px}
+.detail-all{margin-top:14px}
+.pv-summary{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.pv-summary>div{border:1px solid var(--line);border-radius:8px;padding:7px 13px;min-width:128px;background:#fff}
+.pv-summary span{display:block;font-size:12px;color:var(--muted)}
+.pv-summary strong{font-size:18px}
+.pv-summary .ok{color:var(--green)}.pv-summary .warn{color:var(--amber)}
+.pv-sel{max-width:280px}
+.map-note{background:var(--greenbg);border-left:3px solid var(--jade);padding:9px 12px;border-radius:0 6px 6px 0;font-size:14px;margin:0 0 12px}
+.map-headrow{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.map-headrow input{width:90px;padding:6px 9px;border:1px solid var(--line);border-radius:6px}
+.map-sheet{font-size:13px;color:var(--muted)}
+.map-preview th{font-size:12px;white-space:nowrap}
+.map-preview td{font-size:12px;color:var(--muted);white-space:nowrap}
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:14px 0}
+.map-field label{display:block;font-size:13px;margin-bottom:4px}
+.map-field select{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.map-field.is-required select{border-color:var(--jade)}
+.map-field .req{color:var(--red);font-size:11px}
+.map-save{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.map-save input[type=text],.map-save input:not([type]){flex:1 1 220px;padding:7px 9px;border:1px solid var(--line);border-radius:6px}
+.map-remember{display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap}
+.dict-alias{width:100%;min-width:260px;padding:6px 9px;border:1px solid var(--line);border-radius:6px}
+.mat-tag{color:var(--jade);font-size:12px}
+.mat-tag.none{color:var(--muted)}
+.tag.warn{background:var(--amberbg);color:var(--amber)}
+@media(max-width:760px){.pg-spark{display:none}.pg-name{min-width:120px}}
 </style></head><body>
 <section class="lock-screen" id="passwordGate"><form class="lock-card" id="lockForm"><div class="lock-brand"><div class="brand-mark">衡</div><div><h1>进入衡价云</h1><p>多项目造价管理数据库</p></div></div><div class="field"><label for="passwordInput">访问密码</label><div class="password-wrap"><input id="passwordInput" type="password" autocomplete="current-password" required><button class="password-toggle" id="passwordToggle" type="button">显示</button></div></div><div class="lock-error" id="lockError" role="alert"></div><button class="btn btn-primary lock-submit">解锁并进入</button><small class="lock-hint">密码提示：我的 GitHub 用户名</small></form></section>
 <div id="appShell" class="hidden"><header class="appbar"><div class="appbar-inner"><div class="brand"><div class="brand-mark">衡</div><div><strong>衡价云</strong><small>项目造价数据库</small></div></div><div class="appbar-context" id="appbarContext"></div><div class="appbar-actions" id="appbarActions"></div></div></header><main class="page">
@@ -31,11 +96,11 @@
 <header class="home-head panel"><div><span class="eyebrow">多项目造价管理数据库</span><h1>项目成本、合同执行与市场单价</h1><p>每个项目独立核算；所有金额以不含税为主、含税为辅，数据修改后实时重算。</p></div><div class="toolbar"><button class="btn btn-outline" id="exportJsonBtn">导出全部数据</button><label class="btn btn-outline" for="importJsonInput">导入数据</label><input class="file-input" id="importJsonInput" type="file" accept=".json"><button class="btn btn-outline" id="monthlyReportBtn">月报 HTML</button><button class="btn btn-outline" id="monthlyExcelBtn">月报 Excel</button><button class="btn btn-outline" id="resetDemoBtn">重置示例数据</button><button class="btn btn-primary" id="newProjectBtn">＋ 新建项目</button></div></header>
 <section class="risk-panel panel"><div class="section-head"><div><span class="eyebrow">自动诊断</span><h2>风险总览</h2><p>自动扫描超支、付款、变更和单价异常。</p></div><span class="formula">红色：异常｜黄色：预警</span></div><div class="risk-grid" id="riskGrid"></div></section>
 <section class="assistant panel"><div class="section-head"><div><span class="eyebrow">智能查询助手</span><h2>用自然语言查造价</h2><p>答案逐合同列明计算式和数据依据。</p></div></div><form class="assistant-row" id="assistantForm"><label class="sr-only" for="assistantInput">造价问题</label><input id="assistantInput" placeholder="例如：所有合同付款到85%还能付多少" required><button class="btn btn-primary">计算并回答</button></form><div class="assistant-examples" id="assistantExamples"></div><div class="answer hidden" id="assistantAnswer"></div></section>
-<section class="library-panel panel" id="priceLibrary"><div class="section-head"><div><span class="eyebrow">跨项目价格资产</span><h2>单价库</h2><p>只收录上传清单中的原始分项数据，可追溯项目、合同和源文件。</p></div><button class="btn btn-outline" id="exportPriceBtn">导出单价库 Excel</button><label class="btn btn-primary" for="priceFileInput">上传清单</label><input class="file-input" id="priceFileInput" type="file" accept=".xlsx,.xls,.pdf"></div><form class="search-grid" id="priceSearchForm"><input id="priceKeyword" placeholder="搜索分项名称或描述"><select id="priceBusiness"><option>全部业态</option><option>办公</option><option>住宅</option><option>商业综合体</option></select><select id="priceSpecialty"><option>全部专业</option></select><button class="btn btn-primary">查询单价</button></form><div class="price-stats" id="priceStats"></div><div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>专业</th><th>子目编码</th><th>单价描述（原文）</th><th class="num">单价（元）</th><th>单位</th><th>组价构成</th><th>项目 / 合同</th><th>业态</th><th>来源文件</th><th>合同执行时间</th><th>判断</th><th>操作</th></tr></thead><tbody id="priceRows"></tbody></table></div><div class="scroll-hint">← 横向滑动查看更多 →</div></div></section></section>
+<section class="library-panel panel" id="priceLibrary"><div class="section-head"><div><span class="eyebrow">跨项目价格资产</span><h2>单价库</h2><p>只收录上传清单中的原始分项数据，可追溯项目、合同和源文件。</p></div><button class="btn btn-outline" id="dictBtn">物料字典</button><button class="btn btn-outline" id="tplBtn">导入模板</button><button class="btn btn-outline" id="exportPriceBtn">导出单价库 Excel</button><label class="btn btn-primary" for="priceFileInput">上传清单</label><input class="file-input" id="priceFileInput" type="file" accept=".xlsx,.xls,.pdf"></div><form class="search-grid" id="priceSearchForm"><input id="priceKeyword" placeholder="搜索分项名称、标准物料或别名（如 C30 / 商砂 / HRB400）"><select id="priceBusiness"><option>全部业态</option><option>办公</option><option>住宅</option><option>商业综合体</option></select><select id="priceSpecialty"><option>全部专业</option></select><select id="pricePriceType"><option>全部类型</option></select><button class="btn btn-primary">查询单价</button></form><div class="price-stats" id="priceStats"></div><div class="type-stats" id="priceTypeStats"></div><div class="price-groups" id="priceGroups"></div><details class="pv-block detail-all"><summary><b>全部明细</b>　结论看上方，需要逐条核对时展开这里</summary><div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>专业</th><th>子目编码</th><th>单价描述（原文）</th><th class="num">单价（元）</th><th>单位</th><th>组价构成</th><th>项目 / 合同</th><th>业态</th><th>来源文件</th><th>合同执行时间</th><th>判断</th><th>操作</th></tr></thead><tbody id="priceRows"></tbody></table></div><div class="scroll-hint">← 横向滑动查看更多 →</div></div></details></section></section>
 <section id="projectView" class="hidden"><header class="project-hero panel"><div class="project-hero-top"><div><span class="eyebrow">单项目独立账簿</span><h1 id="currentProjectTitle"></h1><p class="num" id="currentProjectCode"></p><div class="project-info" id="currentProjectInfo"></div></div><div id="currentProjectTags"></div></div></header><div class="edit-legend"><svg class="edit-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4z"/></svg><b>数字编辑：</b>点击带铅笔的数字直接修改；汇总数字点击后进入对应明细；人工修改值显示“*”，动态结算允许人工纠偏或恢复自动计算。</div><div class="core-grid" id="coreGrid"></div><section class="panel" style="padding:16px 18px"><div class="section-head"><div><span class="eyebrow">合同造价账卡</span><h2>合同、变更、扣减、付款与结算</h2><p>总包汇总在上，总包自身与专业分包分层显示；独立承包单独核算。</p></div><div class="contract-tools"><button class="btn btn-outline" id="projectEditBtn">编辑项目</button><button class="btn btn-outline" id="projectReportBtn">本项目月报 HTML</button><button class="btn btn-outline" id="projectReportExcelBtn">本项目月报 Excel</button><button class="btn btn-outline" id="newContractBtn">＋ 新增合同</button><button class="btn btn-outline" id="changeLedgerBtn">变更台账</button><button class="btn btn-outline" id="exportProjectBtn">导出本项目 Excel</button><button class="btn btn-danger" id="deleteProjectBtn">删除项目</button></div></div><div class="tree" id="contractTree"></div></section></section>
 </main></div>
 <div class="modal-backdrop" id="genericModal"><form class="modal" id="genericForm"><div class="modal-head"><h3 id="modalTitle">编辑数据</h3><button type="button" class="close" data-close aria-label="关闭">×</button></div><div class="modal-body" id="modalBody"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-close>取消</button><button class="btn btn-primary" id="modalSaveBtn">保存并重算</button></div></form></div>
-<div class="modal-backdrop" id="previewModal"><div class="modal wide"><div class="modal-head"><h3 id="previewTitle">确认清单解析结果</h3><button type="button" class="close" data-close>×</button></div><div class="modal-body" id="previewBody"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-close>取消</button><button class="btn btn-primary" id="confirmPriceImport">确认入库</button></div></div></div><div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="previewModal"><div class="modal wide"><div class="modal-head"><h3 id="previewTitle">确认清单解析结果</h3><button type="button" class="close" data-close>×</button></div><div class="modal-body" id="previewBody"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-close>取消</button><button class="btn btn-primary" id="confirmPriceImport">确认入库</button></div></div></div><div class="modal-backdrop" id="mapModal"><div class="modal wide"><div class="modal-head"><h3>清单列映射</h3><button type="button" class="close" id="mapCancel">×</button></div><div class="modal-body" id="mapBody"></div><div class="modal-foot"><button type="button" class="btn btn-outline" id="mapCancel2">取消</button><button class="btn btn-primary" id="mapConfirm">确认映射并解析</button></div></div></div><div class="modal-backdrop" id="dictModal"><div class="modal wide"><div class="modal-head"><h3 id="dictTitle">物料字典</h3><button type="button" class="close" data-close>×</button></div><div class="modal-body" id="dictBody"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-close>关闭</button><button class="btn btn-primary" id="dictSave">保存</button></div></div></div><div class="toast" id="toast"></div>
 <script>
 (()=>{'use strict';
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],num=v=>+Number(v||0).toFixed(10),fmt=v=>num(v).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}),pct=v=>`${(num(v)*100).toFixed(1)}%`,esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c])),uid=p=>`${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`,today=()=>new Date().toISOString().slice(0,10),clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
@@ -45,7 +110,532 @@ db.version(1).stores({projects:'&projectId,projectCode,businessType,status,creat
 db.version(2).stores({projects:'&projectId,projectCode,businessType,status,createdAt',contracts:'&contractId,projectId,parentContractId,contractType,contractCode,signDate',changes:'&changeId,contractId,changeDate,auditStatus',payments:'&paymentId,contractId,paymentDate,nodeName',files:'&fileId,relationType,relationId,[relationType+relationId],fileType,fileKey',deductions:'&deductionId,contractId,deductionDate,deductionType',unitPrices:'&unitPriceId,projectId,contractId,specialty,description,unit,fileId,createdAt'}).upgrade(async tx=>{await tx.table('contracts').toCollection().modify(c=>{c.taxRate=num(c.taxRate||(c.amountNet?c.amountTax/c.amountNet-1:.09));c.remeasurementStatus=c.remeasurementStatus||'未重计量';c.budgetAmountTax=num(c.budgetAmountTax);c.editedFields=c.editedFields||[]});await tx.table('projects').toCollection().modify(p=>p.editedFields=p.editedFields||[]);await tx.table('payments').toCollection().modify(p=>{p.deductionReason=p.deductionReason||'';p.note=p.note||'';p.editedFields=p.editedFields||[]});await tx.table('changes').toCollection().modify(c=>c.editedFields=c.editedFields||[])});
 db.version(3).stores({projects:'&projectId,projectCode,businessType,status,createdAt',contracts:'&contractId,projectId,parentContractId,contractType,contractCode,signDate',changes:'&changeId,contractId,changeDate,auditStatus',payments:'&paymentId,contractId,paymentDate,nodeName',files:'&fileId,relationType,relationId,[relationType+relationId],fileType,fileKey',deductions:'&deductionId,contractId,deductionDate,deductionType',unitPrices:'&unitPriceId,projectId,contractId,specialty,description,unit,fileId,createdAt'}).upgrade(async tx=>{await tx.table('contracts').toCollection().modify(c=>{c.settlementOverrideTax=null;c.settlementOverrideReason=''});await tx.table('deductions').toCollection().modify(d=>d.editedFields=d.editedFields||[])});
 db.version(4).stores({projects:'&projectId,projectCode,businessType,status,createdAt',contracts:'&contractId,projectId,parentContractId,contractType,contractCode,signDate',changes:'&changeId,contractId,changeDate,auditStatus',payments:'&paymentId,contractId,paymentDate,nodeName',files:'&fileId,relationType,relationId,[relationType+relationId],fileType,fileKey',deductions:'&deductionId,contractId,deductionDate,deductionType',unitPrices:'&unitPriceId,projectId,contractId,specialty,description,unit,itemCode,price,priceExecDate,fileId,createdAt'}).upgrade(async tx=>{await tx.table('unitPrices').toCollection().modify(p=>{p.itemCode=p.itemCode||'';p.price=num(p.price);p.priceExecDate=p.priceExecDate||'';p.laborFee=num(p.laborFee);p.materialFee=num(p.materialFee);p.auxiliaryFee=num(p.auxiliaryFee);p.machineryFee=num(p.machineryFee);p.profitFee=num(p.profitFee)})});
-const state={projectId:null,filter:'全部',expanded:{},subExpanded:{},groupOpen:{},trace:{},nodes:{},modalAction:null,_upl:{},pendingPrices:[],appStarted:false,saving:false,renderSeq:0,priceFilter:{keyword:'',business:'全部业态',specialty:'全部专业'}};
+db.version(5).stores({projects:'&projectId,projectCode,businessType,status,createdAt',contracts:'&contractId,projectId,parentContractId,contractType,contractCode,signDate',changes:'&changeId,contractId,changeDate,auditStatus',payments:'&paymentId,contractId,paymentDate,nodeName',files:'&fileId,relationType,relationId,[relationType+relationId],fileType,fileKey',deductions:'&deductionId,contractId,deductionDate,deductionType',unitPrices:'&unitPriceId,projectId,contractId,specialty,description,unit,itemCode,price,priceExecDate,fileId,createdAt,matId,priceType,region,taxFlag',materials:'&matId,stdName,categoryL1,categoryL2,stdUnit',sourceTemplates:'&templateId,fingerprint,name,createdAt'}).upgrade(async tx=>{await tx.table('unitPrices').toCollection().modify(p=>{p.matId=p.matId||'';p.priceType=p.priceType||'合同清单';p.taxFlag=p.taxFlag||'含税';p.region=p.region||''})});
+const state={projectId:null,filter:'全部',expanded:{},subExpanded:{},groupOpen:{},trace:{},nodes:{},modalAction:null,_upl:{},pendingPrices:[],appStarted:false,saving:false,renderSeq:0,priceFilter:{keyword:'',business:'全部业态',specialty:'全部专业',priceType:'全部类型'},pendingGroups:[]};
+
+/* ============================================================
+   衡价云 · 价格库增强模块
+   1) 物料字典与别名归一   —— 解决"搜不准"
+   2) 导入映射模板         —— 解决"换格式就识别不了"
+   3) 统计式查询结果       —— 解决"查出来看不出结论"
+   ============================================================ */
+
+/* ---------- 0. 通用小工具 ---------- */
+const SYN=[[/砼/g,'混凝土'],[/商品混凝土|商混/g,'预拌混凝土'],[/螺纹钢|带肋钢筋|三级钢/g,'钢筋'],[/圆钢|一级钢/g,'钢筋'],[/砂加气|加气块|蒸压加气混凝土砌块|ALC板?/g,'加气混凝土砌块'],[/挤塑板|XPS板?/g,'挤塑聚苯板'],[/苯板|EPS板?/g,'模塑聚苯板'],[/大理石板?|花岗岩板?/g,'石材'],[/乳胶漆|内墙涂料/g,'乳胶漆'],[/断桥铝|隔热铝合金/g,'断桥铝合金'],[/预制管桩|PHC管?桩/g,'预应力管桩'],[/干粉砂浆|预拌砂浆/g,'干混砂浆']];
+function normKey(v){
+  let s=String(v??'').replace(/[！-～]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/　/g,'');
+  SYN.forEach(([re,to])=>{s=s.replace(re,to)});
+  return s.replace(/\s+/g,'').replace(/[（）()\[\]{}【】<>《》「」“”‘’'"，,。.、:：;；|｜\/\\·~`_\-—+*#]/g,'').toUpperCase();
+}
+function pctl(sorted,p){if(!sorted.length)return 0;const i=(sorted.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return lo===hi?sorted[lo]:sorted[lo]+(sorted[hi]-sorted[lo])*(i-lo)}
+function statsOf(values){
+  const v=values.map(x=>num(x)).filter(x=>x>0).sort((a,b)=>a-b);
+  if(!v.length)return{n:0,med:0,p25:0,p75:0,avg:0,min:0,max:0};
+  return{n:v.length,med:pctl(v,.5),p25:pctl(v,.25),p75:pctl(v,.75),avg:v.reduce((a,b)=>a+b,0)/v.length,min:v[0],max:v[v.length-1]};
+}
+function monthOf(r){const d=r.priceExecDate||r.createdAt||'';return String(d).slice(0,7)}
+function sparkline(pts,w=200,h=44){
+  if(pts.length<2)return'<span class="spark-empty">样本月份不足，无趋势</span>';
+  const vs=pts.map(p=>p.v),mn=Math.min(...vs),mx=Math.max(...vs),rng=(mx-mn)||1;
+  const xy=pts.map((p,i)=>[(i/(pts.length-1))*(w-6)+3,h-4-((p.v-mn)/rng)*(h-10)]);
+  const d=xy.map((c,i)=>`${i?'L':'M'}${c[0].toFixed(1)},${c[1].toFixed(1)}`).join(' ');
+  const area=`M${xy[0][0].toFixed(1)},${h} `+xy.map(c=>`L${c[0].toFixed(1)},${c[1].toFixed(1)}`).join(' ')+` L${xy[xy.length-1][0].toFixed(1)},${h} Z`;
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="价格趋势 ${pts[0].m} 至 ${pts[pts.length-1].m}"><path class="spark-area" d="${area}"/><path class="spark-line" d="${d}"/><circle class="spark-dot" cx="${xy[xy.length-1][0].toFixed(1)}" cy="${xy[xy.length-1][1].toFixed(1)}" r="2.6"/></svg>`;
+}
+
+/* ---------- 1. 物料字典 ---------- */
+/* k = 必须命中的核心词；spec = 必须命中的规格特征（用于区分强度等级等） */
+const MAT_SEED=[
+ ['CONC-C15','预拌混凝土 C15','混凝土','预拌混凝土','m3',['混凝土'],'C15'],
+ ['CONC-C20','预拌混凝土 C20','混凝土','预拌混凝土','m3',['混凝土'],'C20'],
+ ['CONC-C25','预拌混凝土 C25','混凝土','预拌混凝土','m3',['混凝土'],'C25'],
+ ['CONC-C30','预拌混凝土 C30','混凝土','预拌混凝土','m3',['混凝土'],'C30'],
+ ['CONC-C35','预拌混凝土 C35','混凝土','预拌混凝土','m3',['混凝土'],'C35'],
+ ['CONC-C40','预拌混凝土 C40','混凝土','预拌混凝土','m3',['混凝土'],'C40'],
+ ['CONC-C45','预拌混凝土 C45','混凝土','预拌混凝土','m3',['混凝土'],'C45'],
+ ['CONC-C50','预拌混凝土 C50','混凝土','预拌混凝土','m3',['混凝土'],'C50'],
+ ['CONC-P6','抗渗混凝土 P6','混凝土','抗渗混凝土','m3',['混凝土'],'P6'],
+ ['CONC-P8','抗渗混凝土 P8','混凝土','抗渗混凝土','m3',['混凝土'],'P8'],
+ ['CONC-FINE','细石混凝土','混凝土','细石混凝土','m3',['细石','混凝土'],null],
+ ['CONC-CUSH','混凝土垫层','混凝土','垫层','m3',['垫层'],null],
+ ['REBAR-HPB300','钢筋 HPB300（光圆）','钢筋','热轧光圆','t',['钢筋'],'HPB300'],
+ ['REBAR-HRB400E','钢筋 HRB400E（抗震）','钢筋','热轧带肋','t',['钢筋'],'HRB400E'],
+ ['REBAR-HRB400','钢筋 HRB400','钢筋','热轧带肋','t',['钢筋'],'HRB400'],
+ ['REBAR-HRB500E','钢筋 HRB500E（抗震）','钢筋','热轧带肋','t',['钢筋'],'HRB500E'],
+ ['REBAR-HRB500','钢筋 HRB500','钢筋','热轧带肋','t',['钢筋'],'HRB500'],
+ ['REBAR-CRB550','冷轧带肋钢筋 CRB550','钢筋','冷轧带肋','t',['钢筋'],'CRB550'],
+ ['REBAR-MESH','钢筋网片','钢筋','成型制品','t',['钢筋网'],null],
+ ['STEEL-SECT','型钢','钢结构','型钢','t',['型钢'],null],
+ ['STEEL-PLATE','钢板','钢结构','钢板','t',['钢板'],null],
+ ['BLOCK-AAC','加气混凝土砌块','砌体','蒸压加气块','m3',['加气混凝土砌块'],null],
+ ['BLOCK-CERAM','陶粒混凝土砌块','砌体','陶粒砌块','m3',['陶粒'],null],
+ ['BRICK-SHALE','页岩砖','砌体','烧结砖','千块',['页岩砖'],null],
+ ['BRICK-SOLID','混凝土实心砖','砌体','混凝土砖','千块',['实心砖'],null],
+ ['BRICK-SAND','蒸压灰砂砖','砌体','灰砂砖','千块',['灰砂砖'],null],
+ ['MORT-DRY-M5','干混砌筑砂浆 M5','砂浆','干混砂浆','t',['干混','砂浆'],'M5'],
+ ['MORT-DRY-M7.5','干混砌筑砂浆 M7.5','砂浆','干混砂浆','t',['干混','砂浆'],'M7.5'],
+ ['MORT-DRY-M10','干混砌筑砂浆 M10','砂浆','干混砂浆','t',['干混','砂浆'],'M10'],
+ ['MORT-PLASTER','干混抹灰砂浆','砂浆','干混砂浆','t',['抹灰','砂浆'],null],
+ ['MORT-CEMENT','水泥砂浆','砂浆','现拌砂浆','m3',['水泥','砂浆'],null],
+ ['MORT-MIX','混合砂浆','砂浆','现拌砂浆','m3',['混合','砂浆'],null],
+ ['FORM-WOOD','木模板','模板','木模板','m2',['木模板'],null],
+ ['FORM-ALU','铝模板','模板','铝模板','m2',['铝模板'],null],
+ ['FORM-STEEL','钢模板','模板','钢模板','m2',['钢模板'],null],
+ ['FORM-PLY','覆膜多层板','模板','多层板','m2',['多层板'],null],
+ ['WP-SBS','SBS改性沥青防水卷材','防水','卷材','m2',['SBS'],null],
+ ['WP-SELF','自粘防水卷材','防水','卷材','m2',['自粘'],null],
+ ['WP-PU','聚氨酯防水涂料','防水','涂料','kg',['聚氨酯'],null],
+ ['WP-JS','JS聚合物水泥防水涂料','防水','涂料','kg',['JS'],null],
+ ['WP-MORT','防水砂浆','防水','砂浆','m2',['防水','砂浆'],null],
+ ['INS-XPS','挤塑聚苯板 XPS','保温','板材','m3',['挤塑聚苯板'],null],
+ ['INS-EPS','模塑聚苯板 EPS','保温','板材','m3',['模塑聚苯板'],null],
+ ['INS-ROCK','岩棉板','保温','板材','m3',['岩棉'],null],
+ ['INS-MORT','无机保温砂浆','保温','砂浆','m3',['保温','砂浆'],null],
+ ['WIN-BRIDGE','断桥铝合金窗','门窗','铝合金窗','m2',['断桥铝合金'],null],
+ ['WIN-PVC','塑钢窗','门窗','塑钢窗','m2',['塑钢窗'],null],
+ ['DOOR-FIRE','防火门','门窗','防火门','m2',['防火门'],null],
+ ['DOOR-STEEL','钢质门','门窗','钢质门','m2',['钢质门'],null],
+ ['DOOR-WOOD','木门','门窗','木门','m2',['木门'],null],
+ ['CURTAIN-GLASS','玻璃幕墙','门窗','幕墙','m2',['玻璃幕墙'],null],
+ ['FIN-TILE-WALL','墙面砖','装饰','面砖','m2',['墙面','砖'],null],
+ ['FIN-TILE-FLOOR','地面砖','装饰','面砖','m2',['地面','砖'],null],
+ ['FIN-STONE','石材','装饰','石材','m2',['石材'],null],
+ ['FIN-LATEX','乳胶漆','装饰','涂料','m2',['乳胶漆'],null],
+ ['FIN-REALSTONE','真石漆','装饰','涂料','m2',['真石漆'],null],
+ ['FIN-FLUOR','氟碳漆','装饰','涂料','m2',['氟碳'],null],
+ ['CEIL-MINERAL','矿棉板吊顶','装饰','吊顶','m2',['矿棉板'],null],
+ ['CEIL-ALU','铝扣板吊顶','装饰','吊顶','m2',['铝扣板'],null],
+ ['CEIL-GYP','石膏板吊顶','装饰','吊顶','m2',['石膏板'],null],
+ ['MAT-CEMENT','水泥','原材','胶凝材料','t',['水泥'],null],
+ ['MAT-SAND','中砂','原材','骨料','m3',['中砂'],null],
+ ['MAT-GRAVEL','碎石','原材','骨料','m3',['碎石'],null],
+ ['SCAF-STEEL','钢管脚手架','措施','脚手架','m2',['脚手架'],null],
+ ['EARTH-DIG','土方开挖','土石方','开挖','m3',['土方开挖'],null],
+ ['EARTH-FILL','回填土','土石方','回填','m3',['回填'],null],
+ ['PILE-BORED','钻孔灌注桩','桩基','灌注桩','m3',['灌注桩'],null],
+ ['PILE-PHC','预应力管桩','桩基','管桩','m',['管桩'],null]
+];
+async function ensureMaterials(){
+  if(await db.materials.count())return;
+  await db.materials.bulkAdd(MAT_SEED.map(([matId,stdName,l1,l2,unit,k,spec])=>({
+    matId,stdName,categoryL1:l1,categoryL2:l2,stdUnit:unit,keys:k,spec:spec||'',aliases:[],builtin:true,createdAt:new Date().toISOString()
+  })));
+}
+function matchScore(rawKey,m){
+  if((m.aliases||[]).some(a=>normKey(a)===rawKey))return 100;
+  if(!(m.keys||[]).every(w=>rawKey.includes(normKey(w))))return 0;
+  let s=55;
+  if(m.spec){
+    if(!rawKey.includes(normKey(m.spec)))return 0;
+    s+=30+String(m.spec).length*0.8;              /* 规格越具体，分越高 */
+  }else{
+    s+=8;
+    if(rawKey.includes(normKey(m.stdName)))s+=8;  /* 无规格时才吃标准名加分，否则会盖过更具体的规格 */
+  }
+  return Math.min(s,99);
+}
+function matCandidates(rawName,materials,topN=6){
+  const key=normKey(rawName);
+  let list=materials.map(m=>({m,score:matchScore(key,m)})).filter(x=>x.score>0);
+  /* 若某条命中的规格是另一条命中规格的子串（HRB400 vs HRB400E、C30 vs C30P8），保留更具体的那条 */
+  const hit=list.filter(x=>x.m.spec).map(x=>normKey(x.m.spec));
+  list=list.map(x=>{
+    if(!x.m.spec)return x;
+    const k=normKey(x.m.spec);
+    return hit.some(o=>o!==k&&o.length>k.length&&o.includes(k))?{...x,score:x.score-30}:x;
+  }).filter(x=>x.score>0);
+  return list.sort((a,b)=>b.score-a.score).slice(0,topN);
+}
+const MATCH_OK=70,MATCH_MAYBE=55;
+async function learnAlias(matId,rawName){
+  if(!matId||!rawName)return;
+  const m=await db.materials.get(matId);if(!m)return;
+  const a=m.aliases||[],k=normKey(rawName);
+  if(a.some(x=>normKey(x)===k))return;
+  await db.materials.update(matId,{aliases:[...a,String(rawName).trim()].slice(-200)});
+}
+
+/* ---------- 2. 导入映射层 ---------- */
+const FIELDS=[
+ {key:'itemName',  label:'分项名称',   re:/子目名称|项目名称|清单名称|分项名称|工作内容名称|^名称$|名称/, required:true},
+ {key:'price',     label:'综合单价',   re:/综合单价|不含税单价|除税单价|单价/,                        required:true},
+ {key:'itemCode',  label:'子目编码',   re:/子目编码|项目编码|清单编码|清单项目编码|定额编号|编码|编号/, required:false},
+ {key:'descText',  label:'项目特征',   re:/子目特征|项目特征|特征描述|规格型号|规格|描述|特征/,        required:false},
+ {key:'unit',      label:'计量单位',   re:/计量单位|^单位$|单位/,                                    required:false},
+ {key:'quantity',  label:'工程量',     re:/工程量|^数量$|数量/,                                      required:false},
+ {key:'specialty', label:'专业/类别',  re:/专业|类别|分部/,                                          required:false},
+ {key:'laborFee',  label:'人工费',     re:/人工费|^人工/,                                            required:false},
+ {key:'materialFee',label:'材料费',    re:/材料费|^材料|主材费|主材/,                                required:false},
+ {key:'auxiliaryFee',label:'辅材费',   re:/辅材|辅助材料/,                                           required:false},
+ {key:'machineryFee',label:'机械费',   re:/机械费|^机械|机具/,                                       required:false},
+ {key:'profitFee', label:'管理及利润', re:/管理费及利润|管理及利润|管理费|利润/,                      required:false}
+];
+function readGrids(file){
+  return file.arrayBuffer().then(buf=>{
+    const wb=XLSX.read(buf,{type:'array'});
+    return wb.SheetNames.map(n=>({sheetName:n,grid:XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''})}));
+  });
+}
+function detectHeaderRow(grid){
+  let best=-1,bestScore=0;
+  for(let i=0;i<Math.min(grid.length,40);i++){
+    const cells=(grid[i]||[]).map(v=>String(v).trim()).filter(Boolean);
+    if(cells.length<3)continue;
+    let sc=0;FIELDS.forEach(f=>{if(cells.some(c=>f.re.test(c)))sc+=f.required?3:1});
+    if(sc>bestScore){bestScore=sc;best=i}
+  }
+  return bestScore>=4?best:(best>=0?best:-1);
+}
+function headerFingerprint(cells){
+  const t=cells.map(v=>normKey(v)).filter(Boolean).sort().join('|');
+  let h=0;for(let i=0;i<t.length;i++){h=(h*31+t.charCodeAt(i))>>>0}
+  return 'FP'+h.toString(36)+'-'+t.length;
+}
+function autoMap(header){
+  const map={},used=new Set();
+  FIELDS.forEach(f=>{
+    const i=header.findIndex((v,idx)=>!used.has(idx)&&f.re.test(String(v).trim()));
+    if(i>=0){map[f.key]=i;used.add(i)}
+  });
+  return map;
+}
+function applyMap(grid,headerIdx,map,sheetName){
+  const out=[],g=v=>v===undefined?-1:v;
+  for(let n=headerIdx+1;n<grid.length;n++){
+    const r=grid[n]||[],cell=k=>{const i=g(map[k]);return i<0?'':r[i]};
+    const name=String(cell('itemName')||'').trim(),price=num(cleanNumCell(cell('price')));
+    if(!name)continue;
+    if(!price&&/^[一二三四五六七八九十(（]|^(分部|分项|合计|小计|总计|措施|其中)/.test(name))continue;
+    if(!price)continue;
+    const feat=String(cell('descText')||'').trim();
+    out.push({
+      specialty:String(cell('specialty')||sheetName).trim()||'未分类',
+      itemCode:String(cell('itemCode')||'').trim(),
+      itemName:name,
+      description:[name,feat].filter(Boolean).join('｜'),
+      price,quantity:num(cleanNumCell(cell('quantity'))),
+      unit:String(cell('unit')||'').trim()||'—',
+      laborFee:num(cleanNumCell(cell('laborFee'))),materialFee:num(cleanNumCell(cell('materialFee'))),
+      auxiliaryFee:num(cleanNumCell(cell('auxiliaryFee'))),machineryFee:num(cleanNumCell(cell('machineryFee'))),
+      profitFee:num(cleanNumCell(cell('profitFee'))),
+      sheetName,sourceRow:n+1
+    });
+  }
+  return out;
+}
+function cleanNumCell(v){
+  if(typeof v==='number')return v;
+  const s=String(v??'').replace(/[,，\s¥￥元]/g,'').replace(/[（(].*?[)）]/g,'');
+  const m=s.match(/-?\d+(\.\d+)?/);return m?+m[0]:0;
+}
+/* 映射对话框：返回 {headerIdx,map,templateName,remember} 或 null */
+function openMappingModal(sheetName,grid,initHeaderIdx,initMap){
+  return new Promise(resolve=>{
+    let headerIdx=initHeaderIdx>=0?initHeaderIdx:0,map={...initMap};
+    const body=$('#mapBody');
+    const draw=()=>{
+      const header=(grid[headerIdx]||[]).map(v=>String(v).trim());
+      const colOpts=sel=>['<option value="-1">— 不导入 —</option>'].concat(
+        header.map((h,i)=>`<option value="${i}" ${String(sel)===String(i)?'selected':''}>${esc(h||'（第'+(i+1)+'列·空表头）')}</option>`)).join('');
+      const sample=grid.slice(headerIdx+1,headerIdx+4);
+      body.innerHTML=`
+      <p class="map-note">未匹配到已保存的模板。请确认<b>表头所在行</b>，再把这份清单的列对应到系统字段。确认后会存成模板，<b>下次同样格式自动识别</b>。</p>
+      <div class="map-headrow"><label for="mapHeaderIdx">表头所在行</label>
+        <input type="number" id="mapHeaderIdx" min="1" max="${Math.min(grid.length,60)}" value="${headerIdx+1}">
+        <span class="map-sheet">工作表：${esc(sheetName)}　共 ${grid.length} 行</span></div>
+      <div class="scroll-shell"><div class="table-scroll"><table class="map-preview"><thead><tr>${header.map((h,i)=>`<th>${i+1}. ${esc(h||'—')}</th>`).join('')}</tr></thead>
+      <tbody>${sample.map(r=>`<tr>${header.map((_,i)=>`<td>${esc(String((r||[])[i]??'').slice(0,24))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <div class="scroll-hint">← 横向滑动核对列内容 →</div></div>
+      <div class="map-grid">${FIELDS.map(f=>`
+        <div class="map-field${f.required?' is-required':''}">
+          <label for="map-${f.key}">${f.label}${f.required?' <span class="req">必填</span>':''}</label>
+          <select id="map-${f.key}" data-mapkey="${f.key}">${colOpts(map[f.key]??-1)}</select>
+        </div>`).join('')}</div>
+      <div class="map-save"><label for="mapTplName">模板名称</label>
+        <input id="mapTplName" value="${esc(sheetName||'新模板')}·格式" placeholder="例如：某甲方清单模板">
+        <label class="map-remember"><input type="checkbox" id="mapRemember" checked> 记住这个格式</label></div>`;
+      $('#mapHeaderIdx').onchange=e=>{headerIdx=clamp((+e.target.value||1)-1,0,grid.length-1);map=autoMap((grid[headerIdx]||[]).map(v=>String(v).trim()));draw()};
+      $$('[data-mapkey]',body).forEach(s=>s.onchange=()=>{const v=+s.value;map[s.dataset.mapkey]=v;});
+    };
+    draw();openModal('mapModal');
+    const done=r=>{$('#mapConfirm').onclick=null;$('#mapCancel').onclick=null;closeModals(true);resolve(r)};
+    $('#mapConfirm').onclick=()=>{
+      const miss=FIELDS.filter(f=>f.required&&!(map[f.key]>=0));
+      if(miss.length){toast('还缺必填字段：'+miss.map(f=>f.label).join('、'),true);return}
+      done({headerIdx,map,templateName:$('#mapTplName').value.trim()||'未命名模板',remember:$('#mapRemember').checked});
+    };
+    $('#mapCancel').onclick=()=>done(null);
+  });
+}
+
+/* ---------- 3. 上传解析主流程（替代旧 savePriceFile） ---------- */
+async function savePriceFile(file){
+  if(!file)return;
+  if(/\.pdf$/i.test(file.name)){return savePriceFileLegacyPdf(file)}
+  if(!/\.xlsx?$/i.test(file.name)){toast('图片清单当前版本不进行 OCR。',true);return}
+  await ensureMaterials();
+  let sheets;
+  try{sheets=await readGrids(file)}catch(e){console.error(e);toast('文件解析失败，可打开原文件核对。',true);return}
+  const templates=await db.sourceTemplates.toArray();
+  let rows=[],usedTpl=null,needMap=null;
+  for(const s of sheets){
+    const hi=detectHeaderRow(s.grid);
+    if(hi<0)continue;
+    const header=(s.grid[hi]||[]).map(v=>String(v).trim()),fp=headerFingerprint(header);
+    const tpl=templates.find(t=>t.fingerprint===fp);
+    if(tpl){rows=rows.concat(applyMap(s.grid,tpl.headerOffset??hi,tpl.map,s.sheetName));usedTpl=tpl}
+    else if(!needMap){needMap={sheet:s,headerIdx:hi,fp}}
+  }
+  if(!rows.length&&!needMap){
+    const big=sheets.slice().sort((a,b)=>b.grid.length-a.grid.length)[0];
+    if(!big){toast('文件里没有可读的工作表。',true);return}
+    needMap={sheet:big,headerIdx:detectHeaderRow(big.grid),fp:null};
+  }
+  if(needMap){
+    const header=(needMap.sheet.grid[needMap.headerIdx>=0?needMap.headerIdx:0]||[]).map(v=>String(v).trim());
+    const res=await openMappingModal(needMap.sheet.sheetName,needMap.sheet.grid,needMap.headerIdx,autoMap(header));
+    if(!res){if(!rows.length)return}
+    else{
+      const h2=(needMap.sheet.grid[res.headerIdx]||[]).map(v=>String(v).trim()),fp=headerFingerprint(h2);
+      rows=rows.concat(applyMap(needMap.sheet.grid,res.headerIdx,res.map,needMap.sheet.sheetName));
+      for(const s of sheets){
+        if(s===needMap.sheet)continue;
+        const hi=detectHeaderRow(s.grid);if(hi<0)continue;
+        if(headerFingerprint((s.grid[hi]||[]).map(v=>String(v).trim()))===fp)rows=rows.concat(applyMap(s.grid,hi,res.map,s.sheetName));
+      }
+      if(res.remember){
+        await db.sourceTemplates.put({templateId:uid('TPL'),name:res.templateName,fingerprint:fp,map:res.map,headerOffset:res.headerIdx,
+          sampleHeader:h2.slice(0,20),hitCount:1,createdAt:new Date().toISOString()});
+        toast(`已保存模板「${res.templateName}」，下次同格式自动识别。`);
+      }
+    }
+  }else if(usedTpl){
+    await db.sourceTemplates.update(usedTpl.templateId,{hitCount:(usedTpl.hitCount||0)+1});
+    toast(`已套用模板「${usedTpl.name}」自动识别。`);
+  }
+  if(!rows.length){toast('未识别到有效的名称与单价数据，请核对映射或原文件。',true);return}
+  const materials=await db.materials.toArray();
+  rows=rows.map(r=>{
+    const cs=matCandidates(r.itemName+' '+r.description,materials);
+    const top=cs[0];
+    return{...r,matId:top&&top.score>=MATCH_OK?top.m.matId:'',_cands:cs,_score:top?top.score:0};
+  });
+  const projects=await db.projects.toArray();
+  const proceed=p=>{
+    state.pendingPrices=rows.map(r=>({...r,unitPriceId:uid('UP'),projectId:p?.projectId||'',contractId:'',fileId:'',fileName:file.name,
+      businessType:p?.businessType||'',priceType:'合同清单',taxFlag:'含税',region:p?.location||'',
+      priceExecDate:new Date().toISOString().slice(0,10),createdAt:new Date().toISOString(),editedFields:[]}));
+    setTimeout(()=>showPricePreview(file.name),160);
+  };
+  if(projects.length){
+    openForm('选择清单归属项目',field('projectName','归属项目',projects[0].projectName,'select',
+      opts(projects.map(x=>x.projectName).concat(['不归属项目（独立归档）']),projects[0].projectName)),
+      async v=>proceed(projects.find(x=>x.projectName===v.projectName)||null));
+  }else proceed(null);
+}
+async function savePriceFileLegacyPdf(file){
+  await ensureMaterials();
+  let rows=[];
+  try{rows=await parsePdf(file)}catch(e){console.error(e);toast('PDF 解析失败。',true);return}
+  if(!rows.length){toast('未从 PDF 识别到完整的名称、单位和单价。',true);return}
+  const materials=await db.materials.toArray();
+  rows=rows.map(r=>{const cs=matCandidates(r.itemName+' '+r.description,materials),top=cs[0];
+    return{...r,matId:top&&top.score>=MATCH_OK?top.m.matId:'',_cands:cs,_score:top?top.score:0}});
+  const projects=await db.projects.toArray();
+  const proceed=p=>{state.pendingPrices=rows.map(r=>({...r,unitPriceId:uid('UP'),projectId:p?.projectId||'',contractId:'',fileId:'',fileName:file.name,
+    businessType:p?.businessType||'',priceType:'合同清单',taxFlag:'含税',region:p?.location||'',
+    priceExecDate:new Date().toISOString().slice(0,10),createdAt:new Date().toISOString(),editedFields:[]}));
+    setTimeout(()=>showPricePreview(file.name),160)};
+  if(projects.length){openForm('选择清单归属项目',field('projectName','归属项目',projects[0].projectName,'select',
+    opts(projects.map(x=>x.projectName).concat(['不归属项目（独立归档）']),projects[0].projectName)),
+    async v=>proceed(projects.find(x=>x.projectName===v.projectName)||null))}else proceed(null);
+}
+
+/* ---------- 4. 预览 + 归一复核 ---------- */
+async function showPricePreview(name){
+  const materials=await db.materials.toArray();
+  const rows=state.pendingPrices;
+  /* 按原始名称去重，人工只需复核不同的名称，而不是每一行 */
+  const groups=new Map();
+  rows.forEach(r=>{const k=normKey(r.itemName);if(!groups.has(k))groups.set(k,{key:k,raw:r.itemName,rows:[],matId:r.matId,cands:r._cands||[],score:r._score||0});groups.get(k).rows.push(r)});
+  state.pendingGroups=[...groups.values()].sort((a,b)=>(a.score>=MATCH_OK?1:0)-(b.score>=MATCH_OK?1:0)||b.rows.length-a.rows.length);
+  const allOpts=materials.slice().sort((a,b)=>a.stdName.localeCompare(b.stdName,'zh')).map(m=>({id:m.matId,t:`${m.stdName}（${m.categoryL1}）`}));
+  const okN=state.pendingGroups.filter(g=>g.score>=MATCH_OK).length,unk=state.pendingGroups.length-okN;
+  $('#previewTitle').textContent=`确认清单解析结果｜${name}`;
+  $('#previewBody').innerHTML=`
+  <div class="pv-summary"><div><span>识别有效单价</span><strong class="num">${rows.length} 条</strong></div>
+    <div><span>不同分项名称</span><strong class="num">${state.pendingGroups.length} 种</strong></div>
+    <div><span>已自动归一</span><strong class="num ok">${okN} 种</strong></div>
+    <div><span>待人工确认</span><strong class="num ${unk?'warn':''}">${unk} 种</strong></div></div>
+  <details class="pv-block" open><summary><b>第一步 · 归一复核</b>　只需确认下面 ${state.pendingGroups.length} 种名称，确认结果会被记住，下次同样写法自动命中</summary>
+    <div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>清单原始名称</th><th class="num">行数</th><th>归一到标准物料</th><th>匹配</th></tr></thead><tbody>
+    ${state.pendingGroups.map((g,i)=>{
+      const cand=g.cands.map(c=>c.m.matId);
+      const sel=[`<option value="">— 不归一 —</option>`]
+        .concat(g.cands.map(c=>`<option value="${c.m.matId}" ${g.matId===c.m.matId?'selected':''}>${esc(c.m.stdName)}　·推荐 ${Math.round(c.score)}</option>`))
+        .concat(['<option disabled>──── 全部字典 ────</option>'])
+        .concat(allOpts.filter(o=>!cand.includes(o.id)).map(o=>`<option value="${o.id}" ${g.matId===o.id?'selected':''}>${esc(o.t)}</option>`)).join('');
+      const badge=g.score>=MATCH_OK?'<span class="tag finished">自动</span>':g.score>=MATCH_MAYBE?'<span class="tag warn">存疑</span>':'<span class="tag danger">未匹配</span>';
+      return `<tr><td>${esc(g.raw)}</td><td class="num">${g.rows.length}</td><td><select class="pv-sel" data-gidx="${i}">${sel}</select></td><td>${badge}</td></tr>`}).join('')}
+    </tbody></table></div><div class="scroll-hint">← 横向滑动 →</div></div></details>
+  <details class="pv-block"><summary><b>第二步 · 明细预览</b>　前 100 条，确认后全部入库</summary>
+    <div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>专业</th><th>子目编码</th><th>描述</th><th>单位</th><th class="num">数量</th><th>组价构成</th><th class="num">单价（元）</th><th>来源位置</th></tr></thead><tbody>
+    ${rows.slice(0,100).map(r=>{const fees=[['人',r.laborFee],['材',r.materialFee],['辅',r.auxiliaryFee],['机',r.machineryFee],['利',r.profitFee]],
+      feeCell=fees.some(x=>num(x[1]))?fees.map(x=>`${x[0]}${fmt(num(x[1]))}`).join('·'):'—';
+      return `<tr><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td><td>${esc(r.description)}</td><td>${esc(r.unit)}</td><td class="num">${fmt(r.quantity)}</td><td class="num">${feeCell}</td><td class="num">${fmt(r.price)}</td><td>${esc(r.sheetName)}${r.sourceRow?' 第'+r.sourceRow+'行':''}</td></tr>`}).join('')}
+    </tbody></table></div><div class="scroll-hint">← 横向滑动 →</div></div></details>`;
+  $$('.pv-sel').forEach(s=>s.onchange=()=>{state.pendingGroups[+s.dataset.gidx].matId=s.value;state.pendingGroups[+s.dataset.gidx].manual=true});
+  openModal('previewModal');
+}
+async function confirmPriceImportEnhanced(){
+  const groups=state.pendingGroups||[];
+  const byKey=new Map(groups.map(g=>[g.key,g]));
+  const rows=state.pendingPrices.map(r=>{const g=byKey.get(normKey(r.itemName));
+    const{_cands,_score,...clean}=r;return{...clean,matId:g?g.matId||'':r.matId||''}});
+  await db.unitPrices.bulkAdd(rows);
+  /* 人工确认过的写回别名，库越用越准 */
+  for(const g of groups){if(g.manual&&g.matId)await learnAlias(g.matId,g.raw)}
+  const n=rows.length,learned=groups.filter(g=>g.manual&&g.matId).length;
+  state.pendingPrices=[];state.pendingGroups=[];closeModals(true);
+  toast(`已写入 ${n} 条单价${learned?`，并记住 ${learned} 条新的名称写法`:''}。`);
+  state.projectId?renderProject():renderHome();
+}
+
+/* ---------- 5. 查询结果：结论在上，明细在下 ---------- */
+async function renderPrices(){
+  await ensureMaterials();
+  const [projects,contracts,files,all,materials]=await Promise.all([
+    db.projects.toArray(),db.contracts.toArray(),db.files.toArray(),db.unitPrices.toArray(),db.materials.toArray()]);
+  const matById=new Map(materials.map(m=>[m.matId,m]));
+  const f=state.priceFilter,q=(f.keyword||'').trim(),qk=normKey(q);
+  /* 关键词同时命中：原文描述、标准名称、别名 —— 这是"搜得准"的关键 */
+  const hitMats=q?new Set(materials.filter(m=>normKey(m.stdName).includes(qk)||normKey(m.categoryL1).includes(qk)||(m.aliases||[]).some(a=>normKey(a).includes(qk))||matchScore(qk,m)>=MATCH_MAYBE).map(m=>m.matId)):null;
+  const rows=all.filter(r=>{
+    if(f.business!=='全部业态'&&r.businessType!==f.business)return false;
+    if(f.specialty!=='全部专业'&&r.specialty!==f.specialty)return false;
+    if(f.priceType&&f.priceType!=='全部类型'&&(r.priceType||'合同清单')!==f.priceType)return false;
+    if(!q)return true;
+    if(normKey(r.description+r.specialty+(r.itemCode||'')).includes(qk))return true;
+    return !!(r.matId&&hitMats.has(r.matId));
+  });
+  $('#priceSpecialty').innerHTML='<option>全部专业</option>'+[...new Set(all.map(r=>r.specialty))].sort().map(x=>`<option ${x===f.specialty?'selected':''}>${esc(x)}</option>`).join('');
+  const ptSel=$('#pricePriceType');
+  if(ptSel){ptSel.innerHTML=['全部类型','合同清单','信息价','市场询价','中标价','结算价','企业定额'].map(x=>`<option ${x===(f.priceType||'全部类型')?'selected':''}>${x}</option>`).join('')}
+  $('#priceBusiness').value=f.business;$('#priceKeyword').value=f.keyword;
+
+  /* —— 结论区 —— */
+  const st=statsOf(rows.map(r=>r.price));
+  /* 跨单位求中位价没有意义（m³ 的混凝土和 t 的钢筋不能混算），此时只报样本量并把人引到分组结论 */
+  const unitsUsed=[...new Set(rows.map(r=>(r.matId&&matById.get(r.matId)?.stdUnit)||r.unit||'').filter(Boolean))];
+  const mixed=unitsUsed.length>1;
+  const byType={};rows.forEach(r=>{const t=r.priceType||'合同清单';(byType[t]=byType[t]||[]).push(num(r.price))});
+  const typeStats=Object.entries(byType).map(([t,v])=>({t,...statsOf(v)})).sort((a,b)=>b.n-a.n);
+  const base=typeStats.find(x=>x.t==='信息价')||typeStats[0];
+  const u=unitsUsed[0]?`<small>/${esc(unitsUsed[0])}</small>`:'';
+  $('#priceStats').innerHTML=!st.n?'<div class="stat"><span>匹配记录</span><strong class="num">0 条</strong></div>'
+   :mixed?`
+    <div class="stat"><span>样本量</span><strong class="num">${st.n} 条</strong></div>
+    <div class="stat"><span>归一物料</span><strong class="num">${new Set(rows.map(r=>r.matId).filter(Boolean)).size} 种</strong></div>
+    <div class="stat is-mixed"><span>结果跨 ${unitsUsed.length} 种计量单位（${esc(unitsUsed.slice(0,5).join('、'))}${unitsUsed.length>5?'…':''}）</span><strong>整体中位价没有可比性，请看下方<b>按物料分组</b>的结论</strong></div>`
+   :`
+    <div class="stat"><span>样本量</span><strong class="num">${st.n} 条</strong></div>
+    <div class="stat is-key"><span>中位价</span><strong class="num">¥ ${fmt(st.med)}${u}</strong></div>
+    <div class="stat"><span>合理区间 P25–P75</span><strong class="num">¥ ${fmt(st.p25)} – ${fmt(st.p75)}</strong></div>
+    <div class="stat"><span>均价</span><strong class="num">¥ ${fmt(st.avg)}</strong></div>
+    <div class="stat"><span>极值</span><strong class="num">¥ ${fmt(st.min)} – ${fmt(st.max)}</strong></div>`;
+  const tw=$('#priceTypeStats');
+  if(tw)tw.innerHTML=st.n&&typeStats.length>1&&!mixed?`<div class="ts-head">按价格类型分组${base?`（以 <b>${esc(base.t)}</b> 为基准看偏差）`:''}</div>
+    <div class="ts-row">${typeStats.map(x=>{const dev=base&&base.med?(x.med-base.med)/base.med:0;
+      return `<div class="ts-cell"><span>${esc(x.t)}</span><strong class="num">¥ ${fmt(x.med)}</strong>
+      <small class="num">${x.n} 条${x.t!==base.t&&base.med?`　偏差 <b class="${dev>0?'dev-up':'dev-down'}">${dev>0?'+':''}${(dev*100).toFixed(1)}%</b>`:''}</small></div>`}).join('')}</div>`:'';
+
+  /* —— 分组结论卡片：按归一物料聚合 —— */
+  const gw=$('#priceGroups');
+  if(gw){
+    const gm=new Map();
+    rows.forEach(r=>{const k=r.matId||('__raw:'+normKey(r.itemName||r.description).slice(0,40));
+      if(!gm.has(k))gm.set(k,{k,mat:matById.get(r.matId),label:matById.get(r.matId)?.stdName||(r.itemName||r.description||'未归一'),rows:[]});
+      gm.get(k).rows.push(r)});
+    const groups=[...gm.values()].sort((a,b)=>b.rows.length-a.rows.length).slice(0,12);
+    gw.innerHTML=!groups.length?'':groups.map(g=>{
+      const s=statsOf(g.rows.map(r=>r.price));
+      const mm=new Map();g.rows.forEach(r=>{const m=monthOf(r);if(!m)return;(mm.get(m)||mm.set(m,[]).get(m)).push(num(r.price))});
+      const pts=[...mm.entries()].sort((a,b)=>a[0]<b[0]?-1:1).map(([m,v])=>({m,v:pctl(v.slice().sort((a,b)=>a-b),.5)}));
+      const unit=g.mat?.stdUnit||g.rows[0]?.unit||'';
+      return `<details class="pg-card"><summary>
+        <span class="pg-name">${esc(g.label)}${g.mat?'':' <span class="tag danger">未归一</span>'}</span>
+        <span class="pg-med num">¥ ${fmt(s.med)}<small>/${esc(unit)}</small></span>
+        <span class="pg-rng num">P25–P75　¥ ${fmt(s.p25)} – ${fmt(s.p75)}</span>
+        <span class="pg-n num">${s.n} 条</span>
+        <span class="pg-spark">${sparkline(pts)}</span></summary>
+        <div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>描述（原文）</th><th class="num">单价</th><th>单位</th><th>类型</th><th>项目</th><th>来源文件</th><th>执行时间</th></tr></thead><tbody>
+        ${g.rows.slice().sort((a,b)=>num(a.price)-num(b.price)).map(r=>{const p=projects.find(x=>x.projectId===r.projectId),fl=files.find(x=>x.fileId===r.fileId);
+          return `<tr><td>${esc(r.description)}</td><td class="num">¥ ${fmt(r.price)}</td><td>${esc(r.unit)}</td><td>${esc(r.priceType||'合同清单')}</td><td>${esc(p?.projectName||'—')}</td><td>${esc(fl?.fileName||r.fileName||'—')}</td><td class="num">${esc((r.priceExecDate||'').slice(0,10)||'—')}</td></tr>`}).join('')}
+        </tbody></table></div><div class="scroll-hint">← 横向滑动 →</div></div></details>`}).join('')
+      +(gm.size>12?`<p class="pg-more">仅显示样本最多的 12 组，共 ${gm.size} 组。缩小关键词范围可看到更精确的结论。</p>`:'');
+  }
+
+  /* —— 全量明细（兜底，默认折叠） —— */
+  /* 高/低的判断必须在"同一物料"内比，跨物料比没有意义 */
+  const peer=new Map();
+  rows.forEach(r=>{const k=r.matId||('__raw:'+normKey(r.itemName||r.description).slice(0,40));(peer.get(k)||peer.set(k,[]).get(k)).push(num(r.price))});
+  const peerStats=new Map([...peer.entries()].map(([k,v])=>[k,statsOf(v)]));
+  $('#priceRows').innerHTML=rows.length?rows.map(r=>{
+    const p=projects.find(x=>x.projectId===r.projectId),c=contracts.find(x=>x.contractId===r.contractId),fl=files.find(x=>x.fileId===r.fileId),
+      ps=peerStats.get(r.matId||('__raw:'+normKey(r.itemName||r.description).slice(0,40)))||st,
+      judge=ps.n<3?'<span class="tag">样本不足</span>':r.price>ps.p75?'<span class="tag danger">高于同物料P75</span>':r.price<ps.p25?'<span class="tag residential">低于同物料P25</span>':'<span class="tag finished">区间内</span>',
+      exec=r.priceExecDate?new Date(r.priceExecDate):null,stale=exec?((Date.now()-exec.getTime())/31557600000)>5:false,
+      fees=[['人',r.laborFee],['材',r.materialFee],['辅',r.auxiliaryFee],['机',r.machineryFee],['利',r.profitFee]],
+      feeCell=fees.some(x=>num(x[1]))?fees.map(x=>`${x[0]}${fmt(num(x[1]))}`).join('·'):'—',
+      mn=r.matId?matById.get(r.matId)?.stdName:'';
+    return `<tr><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td><td>${esc(r.description)}${mn?`<br><small class="mat-tag">→ ${esc(mn)}</small>`:'<br><small class="mat-tag none">未归一</small>'}</td><td class="num editable${edited(r,'price')}" data-edit-price="${r.unitPriceId}">¥ ${fmt(r.price)} ${pencil}</td><td>${esc(r.unit)}</td><td class="num">${feeCell}</td><td>${esc(p?.projectName||'—')}<br><small class="num">${esc(c?.contractCode||'—')}</small></td><td>${esc(r.businessType)}</td><td>${esc(fl?.fileName||r.fileName||'—')}</td><td class="num">${exec?exec.toLocaleDateString('zh-CN'):'—'}${stale?' <span class="tag danger">超5年</span>':''}</td><td>${judge}</td><td><button class="btn btn-outline btn-small" data-edit-price="${r.unitPriceId}">编辑</button></td></tr>`}).join('')
+    :'<tr><td colspan="12">暂无匹配单价。请点击右上角「上传清单」入库。</td></tr>';
+  $$('[data-edit-price]').forEach(b=>b.onclick=async()=>editPrice(await db.unitPrices.get(b.dataset.editPrice)));
+}
+
+/* ---------- 6. 字典 / 模板 管理 ---------- */
+async function openDictManager(){
+  await ensureMaterials();
+  const ms=(await db.materials.toArray()).sort((a,b)=>a.categoryL1.localeCompare(b.categoryL1,'zh')||a.stdName.localeCompare(b.stdName,'zh'));
+  const used=await db.unitPrices.toArray();
+  const cnt=new Map();used.forEach(r=>r.matId&&cnt.set(r.matId,(cnt.get(r.matId)||0)+1));
+  $('#dictTitle').textContent=`物料字典（${ms.length} 条）`;
+  $('#dictBody').innerHTML=`<p class="map-note">字典是查询能否"搜得准"的基础。<b>别名</b>会在导入复核时自动积累，也可以在这里手工补。</p>
+  <div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>编码</th><th>标准名称</th><th>大类</th><th>单位</th><th class="num">已关联</th><th>别名（逗号分隔）</th></tr></thead><tbody>
+  ${ms.map(m=>`<tr><td class="num">${esc(m.matId)}</td><td>${esc(m.stdName)}</td><td>${esc(m.categoryL1)}</td><td>${esc(m.stdUnit)}</td><td class="num">${cnt.get(m.matId)||0}</td>
+  <td><input class="dict-alias" data-mat="${esc(m.matId)}" value="${esc((m.aliases||[]).join('，'))}" placeholder="补充这条物料在清单里的其它写法"></td></tr>`).join('')}
+  </tbody></table></div><div class="scroll-hint">← 横向滑动 →</div></div>`;
+  $('#dictSave').onclick=async()=>{
+    for(const inp of $$('.dict-alias')){
+      const list=inp.value.split(/[，,;；]/).map(s=>s.trim()).filter(Boolean);
+      await db.materials.update(inp.dataset.mat,{aliases:list});
+    }
+    closeModals(true);toast('字典已更新，查询立即生效。');renderPrices();
+  };
+  openModal('dictModal');
+}
+async function openTplManager(){
+  const ts=(await db.sourceTemplates.toArray()).sort((a,b)=>(b.hitCount||0)-(a.hitCount||0));
+  $('#dictTitle').textContent=`导入模板（${ts.length} 个）`;
+  $('#dictBody').innerHTML=`<p class="map-note">每种清单格式存一个模板。<b>下次上传同样表头的文件会自动识别</b>，不用再手工对列。</p>`+
+  (!ts.length?'<p>还没有模板。上传一份新格式的清单，在映射对话框里勾选"记住这个格式"即可。</p>':
+  `<div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>模板名称</th><th class="num">命中次数</th><th>已映射字段</th><th>表头样例</th><th>操作</th></tr></thead><tbody>
+  ${ts.map(t=>`<tr><td>${esc(t.name)}</td><td class="num">${t.hitCount||0}</td>
+  <td>${FIELDS.filter(f=>t.map&&t.map[f.key]>=0).map(f=>esc(f.label)).join('、')||'—'}</td>
+  <td><small>${esc((t.sampleHeader||[]).filter(Boolean).slice(0,8).join(' ｜ '))}</small></td>
+  <td><button class="btn btn-danger btn-small" data-tpl-del="${esc(t.templateId)}">删除</button></td></tr>`).join('')}
+  </tbody></table></div><div class="scroll-hint">← 横向滑动 →</div></div>`);
+  $('#dictSave').onclick=()=>closeModals(true);
+  $$('[data-tpl-del]').forEach(b=>b.onclick=async()=>{await db.sourceTemplates.delete(b.dataset.tplDel);toast('模板已删除。');openTplManager()});
+  openModal('dictModal');
+}
+
+/* ---------- 7. 绑定 ---------- */
+$('#dictBtn')&&($('#dictBtn').onclick=()=>openDictManager());
+$('#tplBtn')&&($('#tplBtn').onclick=()=>openTplManager());
+$('#pricePriceType')&&($('#pricePriceType').onchange=e=>{state.priceFilter.priceType=e.target.value;renderPrices()});
+
+
 async function seed(){if(await db.projects.count())return;const projects=[
 {projectId:'P-001',projectCode:'HGY-RES-001',projectName:'新首钢国际人才社区',location:'北京·石景山',businessType:'住宅',targetCostNet:50000000,buildingArea:35000,status:'在建',createdAt:'2026-01-05',editedFields:[]},
 {projectId:'P-002',projectCode:'HGY-OFF-001',projectName:'中关村科技园办公楼',location:'北京·海淀',businessType:'办公',targetCostNet:32000000,buildingArea:18000,status:'在建',createdAt:'2026-02-02',editedFields:[]},
@@ -95,12 +685,12 @@ function parsePaymentPdf(file){return import('./assets/pdf.min.mjs').then(async 
 function parsePaymentExcel(file){return file.arrayBuffer().then(buf=>{const wb=XLSX.read(buf,{type:'array'}),out={};const grab=(grid,r,c)=>{for(const p of [[0,1],[0,2],[1,0],[2,0],[1,1],[0,-1]]){const n=cleanMoney(grid[r+p[0]]&&grid[r+p[0]][c+p[1]]);if(n!=null)return n}return null};for(const sn of wb.SheetNames){const grid=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});for(let r=0;r<grid.length;r++){const row=grid[r]||[];for(let c=0;c<row.length;c++){const cell=String(row[c]||'').trim();if(!cell)continue;if(out.period==null&&/第\s*(\d+)\s*期/.test(cell))out.period=parseInt(cell.match(/第\s*(\d+)\s*期/)[1]);if(out.outputCumulativeTax==null&&/产值总额.{0,8}含增值税/.test(cell))out.outputCumulativeTax=grab(grid,r,c);if(out.currentPaymentTax==null&&/本期应付工程款额/.test(cell))out.currentPaymentTax=grab(grid,r,c);if(out.deductionOtherTax==null&&/累计扣除其他扣款/.test(cell)){const n=grab(grid,r,c);if(n!=null)out.deductionOtherTax=Math.abs(n)}}}}return out}).catch(()=>null)}
 function extractPayment(file){const n=(file.name||'').toLowerCase();if(/\.xlsx?$/.test(n))return parsePaymentExcel(file);if(/\.pdf$/.test(n))return parsePaymentPdf(file);return Promise.resolve(null)}
 function handlePaymentUpload(file){if(!file)return;const fi=$('#paymentFileInput');extractPayment(file).then(o=>{if(fi)fi.value='';if(!o||(!o.outputCumulativeTax&&!o.currentPaymentTax&&!o.deductionOtherTax&&!o.period)){toast('未识别到付款汇总数字，请手动填写或换用文字版PDF。',true);return}const set=(k,v)=>{const el=$('#m-'+k);if(el&&v!=null&&v!=='')el.value=v};if(o.period)set('period','第'+o.period+'期');set('outputCumulativeTax',o.outputCumulativeTax);set('currentPaymentTax',o.currentPaymentTax);set('deductionOtherTax',o.deductionOtherTax);const parts=[];if(o.period)parts.push('第'+o.period+'期');if(o.outputCumulativeTax!=null)parts.push('累计产值 '+fmt(o.outputCumulativeTax));if(o.currentPaymentTax!=null)parts.push('本期应付 '+fmt(o.currentPaymentTax));if(o.deductionOtherTax!=null)parts.push('其他扣减 '+fmt(o.deductionOtherTax));toast('已识别并填入 '+(parts.join('，')||'部分字段')+'，请核对后保存。')})}
-function showPricePreview(name){$('#previewTitle').textContent=`确认清单解析结果｜${name}`;$('#previewBody').innerHTML=`<p>识别到 <b class="num">${state.pendingPrices.length}</b> 条有效单价。请核对后入库；原文、项目、合同和文件会一并保留。</p><div class="scroll-shell is-overflowing"><div class="table-scroll"><table><thead><tr><th>专业</th><th>子目编码</th><th>描述</th><th>单位</th><th class="num">数量</th><th>组价构成</th><th class="num">单价（元）</th><th>来源位置</th></tr></thead><tbody>${state.pendingPrices.slice(0,100).map(r=>{const fees=[['人',r.laborFee],['材',r.materialFee],['辅',r.auxiliaryFee],['机',r.machineryFee],['利',r.profitFee]],feeCell=fees.some(x=>num(x[1]))?fees.map(x=>`${x[0]}${fmt(num(x[1]))}`).join('·'):'—';return `<tr><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td><td>${esc(r.description)}</td><td>${esc(r.unit)}</td><td class="num">${fmt(r.quantity)}</td><td class="num">${feeCell}</td><td class="num">${fmt(r.price)}</td><td>${esc(r.sheetName)}${r.sourceRow?' 第'+r.sourceRow+'行':''}</td></tr>`}).join('')}</tbody></table></div><div class="scroll-hint">← 横向滑动查看更多 →</div></div>${state.pendingPrices.length>100?'<p>预览前100条，确认后全部入库。</p>':''}`;openModal('previewModal')}function uploadField(uplKey,label,accept='',rel=''){return `<div class="field full"><label>${label}</label><input type="file" id="up-${uplKey}" data-uplt="${uplKey}" ${rel?`data-rel="${rel}"`:``} ${accept?`accept="${accept}"`:''} multiple><div class="upl-list" id="upl-${uplKey}"></div></div>`}
+function showPricePreviewOld(name){$('#previewTitle').textContent=`确认清单解析结果｜${name}`;$('#previewBody').innerHTML=`<p>识别到 <b class="num">${state.pendingPrices.length}</b> 条有效单价。请核对后入库；原文、项目、合同和文件会一并保留。</p><div class="scroll-shell is-overflowing"><div class="table-scroll"><table><thead><tr><th>专业</th><th>子目编码</th><th>描述</th><th>单位</th><th class="num">数量</th><th>组价构成</th><th class="num">单价（元）</th><th>来源位置</th></tr></thead><tbody>${state.pendingPrices.slice(0,100).map(r=>{const fees=[['人',r.laborFee],['材',r.materialFee],['辅',r.auxiliaryFee],['机',r.machineryFee],['利',r.profitFee]],feeCell=fees.some(x=>num(x[1]))?fees.map(x=>`${x[0]}${fmt(num(x[1]))}`).join('·'):'—';return `<tr><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td><td>${esc(r.description)}</td><td>${esc(r.unit)}</td><td class="num">${fmt(r.quantity)}</td><td class="num">${feeCell}</td><td class="num">${fmt(r.price)}</td><td>${esc(r.sheetName)}${r.sourceRow?' 第'+r.sourceRow+'行':''}</td></tr>`}).join('')}</tbody></table></div><div class="scroll-hint">← 横向滑动查看更多 →</div></div>${state.pendingPrices.length>100?'<p>预览前100条，确认后全部入库。</p>':''}`;openModal('previewModal')}function uploadField(uplKey,label,accept='',rel=''){return `<div class="field full"><label>${label}</label><input type="file" id="up-${uplKey}" data-uplt="${uplKey}" ${rel?`data-rel="${rel}"`:``} ${accept?`accept="${accept}"`:''} multiple><div class="upl-list" id="upl-${uplKey}"></div></div>`}
 function bindUploads(){$$('[data-uplt]').forEach(i=>{if(i._bound)return;i._bound=true;const key=i.dataset.uplt,rel=i.dataset.rel,box=document.getElementById('upl-'+key);state._savedFiles=state._savedFiles||{};const render=()=>{if(!box)return;const saved=state._savedFiles[key]||[],fresh=state._upl[key]||[];box.innerHTML=saved.map(f=>`<span class="file-chip">${esc(f.fileName)}<button type="button" class="chip-x" data-file-del="${f.fileId}" title="删除">×</button></span>`).join('')+fresh.map((f,k)=>`<span class="file-chip">${esc(f.name)}<button type="button" class="chip-x" data-upl-del="${key}" data-idx="${k}" title="删除">×</button></span>`).join('')};if(rel){const q=rel.split('|'),rt=q[0],rid=q.slice(1).join('|');db.files.where('[relationType+relationId]').equals([rt,rid]).toArray().then(a=>{state._savedFiles[key]=a||[];render()})}if(box&&!box._boundDel){box._boundDel=true;box.onclick=e=>{const b=e.target.closest('.chip-x');if(!b)return;if(b.dataset.fileDel){const fid=b.dataset.fileDel;db.files.delete(fid).then(()=>{state._savedFiles[key]=(state._savedFiles[key]||[]).filter(f=>f.fileId!==fid);render()})}else if(b.dataset.uplDel){const idx=+b.dataset.idx;state._upl[key]=(state._upl[key]||[]).filter((f,k)=>k!==idx);render()}}};i.onchange=()=>{const fs=Array.from(i.files);state._upl[key]=[...(state._upl[key]||[]),...fs];render();if(key.startsWith('付款|')){const payFile=fs.find(f=>/\.(pdf|xlsx?)$/i.test(f.name));if(payFile)handlePaymentUpload(payFile)}}})}
 async function commitUpl(relationType,relationId,uplKey){const key=uplKey||(relationType+'|'+relationId),list=state._upl[key]||[];for(const f of list){const ext=(f.name.split('.').pop()||'').toLowerCase(),kind=/xlsx?$/.test(ext)?'excel':/pdf$/.test(ext)?'pdf':'scan';await db.files.add({fileId:uid('F'),relationType,relationId,fileName:f.name,fileType:kind,fileBlob:f,fileKey:key+'|'+f.name+'|'+f.size+'|'+f.lastModified,createdAt:new Date().toISOString()})}delete state._upl[key]}function showChangeLedger(d){const cs=d.changes||[],n=cs.length,recv=cs.filter(v=>v.instructionStatus!=='未收到').length,totalAuditTax=cs.filter(v=>v.auditStatus==='已审').reduce((s,v)=>s+num(v.amountTax),0),reportTax=cs.filter(v=>v.reportStatus!=='未上报').reduce((s,v)=>s+num(v.amountTax),0);const kpi=(label,val,unit='份')=>`<div class="led-kpi"><span>${label}</span><b class="num">${val}</b><small>${unit}</small></div>`;const rows=d.contracts.map(c=>{const list=cs.filter(v=>v.contractId===c.contractId);if(!list.length)return null;const rTax=list.filter(v=>v.reportStatus!=='未上报').reduce((s,v)=>s+num(v.amountTax),0),aTax=list.filter(v=>v.auditStatus==='已审').reduce((s,v)=>s+num(v.amountTax),0);return `<tr><td>${esc(c.contractCode)}</td><td>${esc(c.contractName)}</td><td>${esc(c.unitName||'—')}</td><td class="num">${list.length}</td><td class="num">¥ ${fmt(rTax)}</td><td class="num">¥ ${fmt(aTax)}</td><td class="num">${pct(totalAuditTax?aTax/totalAuditTax:0)}</td></tr>`}).filter(Boolean).join('');const body=`<div class="manager-note">变更台账：按合同汇总本项目的全部变更。金额均为含税口径；占比＝该合同审定金额÷全项目审定金额。</div><div class="ledger-kpis">${kpi('总变更',n)}${kpi('已收到指示',recv)}${kpi('设计变更',cs.filter(v=>v.changeType==='设计变更').length)}${kpi('工程师指示',cs.filter(v=>v.changeType==='工程师指示').length)}${kpi('签证',cs.filter(v=>v.changeType==='签证').length)}${kpi('已审核',cs.filter(v=>v.auditStatus==='已审').length)}${kpi('上报金额','¥ '+fmt(reportTax),'含税元')}${kpi('审定金额','¥ '+fmt(totalAuditTax),'含税元')}</div><div class="scroll-shell is-overflowing"><div class="table-scroll"><table><thead><tr><th>合同编号</th><th>合同名称</th><th>承包单位</th><th>变更数量</th><th>上报金额（含税）</th><th>审定金额（含税）</th><th>占比</th></tr></thead><tbody>${rows||'<tr><td colspan="7">该项目暂无变更记录。</td></tr>'}</tbody></table></div><div class="scroll-hint">← 横向滑动查看更多 →</div></div>`;openManager('变更台账｜'+esc(d.project.projectName),body)}
 
-async function renderPrices(){const projects=await db.projects.toArray(),contracts=await db.contracts.toArray(),files=await db.files.toArray(),all=await db.unitPrices.toArray(),q=state.priceFilter.keyword.toLowerCase(),rows=all.filter(r=>(!q||(r.description+r.specialty).toLowerCase().includes(q))&&(state.priceFilter.business==='全部业态'||r.businessType===state.priceFilter.business)&&(state.priceFilter.specialty==='全部专业'||r.specialty===state.priceFilter.specialty)),values=rows.map(r=>num(r.price)).filter(Boolean),avg=values.length?values.reduce((a,b)=>a+b,0)/values.length:0,min=values.length?Math.min(...values):0,max=values.length?Math.max(...values):0;$('#priceSpecialty').innerHTML='<option>全部专业</option>'+[...new Set(all.map(r=>r.specialty))].sort().map(x=>`<option ${x===state.priceFilter.specialty?'selected':''}>${esc(x)}</option>`).join('');$('#priceBusiness').value=state.priceFilter.business;$('#priceKeyword').value=state.priceFilter.keyword;$('#priceStats').innerHTML=[['匹配记录',rows.length,''],['最低价',min,'price-low'],['平均价',avg,''],['最高价',max,'price-high']].map((x,i)=>`<div class="stat"><span>${x[0]}</span><strong class="num ${x[2]}">${i?'¥ '+fmt(x[1]):x[1]+' 条'}</strong></div>`).join('');$('#priceRows').innerHTML=rows.length?rows.map(r=>{const p=projects.find(x=>x.projectId===r.projectId),c=contracts.find(x=>x.contractId===r.contractId),f=files.find(x=>x.fileId===r.fileId),judge=avg&&r.price>avg*1.15?'<span class="tag danger">偏高</span>':avg&&r.price<avg*.85?'<span class="tag residential">偏低</span>':'<span class="tag finished">正常</span>',exec=r.priceExecDate?new Date(r.priceExecDate):null,ageY=exec?(Date.now()-exec.getTime())/31557600000:0,stale=ageY>5,fees=[['人',r.laborFee],['材',r.materialFee],['辅',r.auxiliaryFee],['机',r.machineryFee],['利',r.profitFee]],feeCell=fees.some(x=>num(x[1]))?fees.map(x=>`${x[0]}${fmt(num(x[1]))}`).join('·'):'—';return `<tr><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td><td>${esc(r.description)}</td><td class="num editable${edited(r,'price')}" data-edit-price="${r.unitPriceId}">¥ ${fmt(r.price)} ${pencil}</td><td>${esc(r.unit)}</td><td class="num">${feeCell}</td><td>${esc(p?.projectName||'—')}<br><small class="num">${esc(c?.contractCode||'—')}</small></td><td>${esc(r.businessType)}</td><td>${esc(f?.fileName||r.fileName||'—')}</td><td class="num">${exec?exec.toLocaleDateString('zh-CN'):'—'}${stale?' <span class="tag danger">超5年</span>':''}</td><td>${judge}</td><td><button class="btn btn-outline btn-small" data-edit-price="${r.unitPriceId}">编辑</button></td></tr>`}).join(''):'<tr><td colspan="12">暂无匹配单价。请从合同卡片上传 Excel 或文本型 PDF 清单，或点击右上角「上传清单」单独入库。</td></tr>';$$('[data-edit-price]').forEach(b=>b.onclick=async()=>editPrice(await db.unitPrices.get(b.dataset.editPrice)))}function editPrice(r){openForm('编辑单价记录',field('specialty','专业类别',r.specialty)+field('itemCode','子目编码',r.itemCode)+`<div class="field full"><label for="m-description">单价描述（原文）</label><textarea id="m-description" name="description">${esc(r.description)}</textarea></div>`+field('price','综合单价（元）',r.price,'number')+field('quantity','数量',r.quantity,'number')+field('unit','单位',r.unit)+`<div class="field full"><label>组价构成（元）</label><small>人工 / 材料 / 辅材 / 机械 / 管理及利润</small></div>`+field('laborFee','人工费',r.laborFee,'number')+field('materialFee','材料费',r.materialFee,'number')+field('auxiliaryFee','辅材费',r.auxiliaryFee,'number')+field('machineryFee','机械费',r.machineryFee,'number')+field('profitFee','管理及利润费',r.profitFee,'number'),async v=>{const changed=Object.keys(v).filter(k=>String(r[k])!==String(v[k]));await db.unitPrices.update(r.unitPriceId,{...v,price:num(v.price),quantity:num(v.quantity),laborFee:num(v.laborFee),materialFee:num(v.materialFee),auxiliaryFee:num(v.auxiliaryFee),machineryFee:num(v.machineryFee),profitFee:num(v.profitFee),editedFields:[...new Set([...(r.editedFields||[]),...changed])]})})}
-async function savePriceFile(file){if(!file)return;const kind=/\.xlsx?$/i.test(file.name)?'excel':/\.pdf$/i.test(file.name)?'pdf':'scan';let rows=[];try{if(kind==='excel')rows=await parseExcel(file);else if(kind==='pdf')rows=await parsePdf(file)}catch(e){console.error(e);toast('文件解析失败，可打开原文件核对。',true);return}if(!rows.length){toast(kind==='scan'?'图片清单当前版本不进行OCR。':'未识别到完整的名称、单位和单价字段。',true);return}const projects=await db.projects.toArray();const proceed=p=>{const pendingRows=rows.map(r=>({...r,unitPriceId:uid('UP'),projectId:p?.projectId||'',contractId:'',fileId:'',fileName:file.name,businessType:p?.businessType||'',priceExecDate:new Date().toISOString().slice(0,10),createdAt:new Date().toISOString(),editedFields:[]}));state.pendingPrices=pendingRows;setTimeout(()=>showPricePreview(file.name),160)};if(projects.length){openForm('选择清单归属项目',field('projectName','归属项目',projects[0].projectName,'select',opts(projects.map(x=>x.projectName).concat(['不归属项目（独立归档）']),projects[0].projectName)),async v=>{const p=projects.find(x=>x.projectName===v.projectName)||null;proceed(p)})}else{proceed(null)}}async function answerQuestion(q){const cards=await allCards(),all=[];cards.forEach(({p,d})=>d.contracts.forEach(c=>all.push({p,c,x:calc(p,c,d.changes,d.payments,d.deductions)})));const rows=[];if(/付款到\s*(\d+(?:\.\d+)?)%/.test(q)){const target=num(q.match(/付款到\s*(\d+(?:\.\d+)?)%/)[1])/100;all.forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`结算 ¥${fmt(x.settleNet)} × ${pct(target)} = ¥${fmt(x.settleNet*target)}，已付 ¥${fmt(x.paidNet)}，还能付 ¥${fmt(x.settleNet*target-x.paidNet)}`]));showAnswer(`付款达到 ${pct(target)} 的可付余额`,rows)}else if(q.includes('超支')&&/最多|排名/.test(q)){cards.sort((a,b)=>(b.t.settleNet-b.p.targetCostNet)-(a.t.settleNet-a.p.targetCostNet)).forEach(({p,t})=>rows.push([p.projectName,`动态结算 ¥${fmt(t.settleNet)} − 目标成本 ¥${fmt(p.targetCostNet)} = ¥${fmt(t.settleNet-p.targetCostNet)}`]));showAnswer('项目超目标成本排名',rows)}else if(/付款.*超过\s*(\d+(?:\.\d+)?)%/.test(q)){const k=num(q.match(/超过\s*(\d+(?:\.\d+)?)%/)[1])/100;all.filter(v=>v.x.payRatio>k).forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`累计付款 ¥${fmt(x.paidNet)} ÷ 结算 ¥${fmt(x.settleNet)} = ${pct(x.payRatio)} > ${pct(k)}`]));showAnswer(`付款占比超过 ${pct(k)} 的合同`,rows)}else if(/变更.*超过\s*(\d+(?:\.\d+)?)%/.test(q)){const k=num(q.match(/超过\s*(\d+(?:\.\d+)?)%/)[1])/100;all.filter(v=>v.x.changeRatio>k).forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`变更 ¥${fmt(x.changeNet)} ÷ 合同 ¥${fmt(x.contractNet)} = ${pct(x.changeRatio)} > ${pct(k)}`]));showAnswer(`变更占比超过 ${pct(k)} 的合同`,rows)}else if(q.includes('单价')||q.includes('价格')){const key=q.replace(/单价对比|单价|价格|对比/g,'').trim(),ps=(await db.unitPrices.toArray()).filter(r=>!key||r.description.includes(key)),vals=ps.map(r=>num(r.price)).filter(Boolean),avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;ps.forEach(r=>rows.push([r.description,`${r.unit}｜¥${fmt(r.price)}｜${r.fileName}`]));showAnswer(`${key||'全部'}单价对比：最低 ¥${fmt(vals.length?Math.min(...vals):0)}，最高 ¥${fmt(vals.length?Math.max(...vals):0)}，均价 ¥${fmt(avg)}`,rows)}else if(q.includes('剩')&&q.includes('付')){all.forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`结算 ¥${fmt(x.settleNet)} − 累计付款 ¥${fmt(x.paidNet)} = 剩余 ¥${fmt(x.remainingNet)}`]));showAnswer(`全部合同剩余未付 ¥${fmt(all.reduce((s,v)=>s+v.x.remainingNet,0))}`,rows)}else showAnswer('暂未识别该问题',[['可用问法','付款到85%还能付多少、哪个项目超支最多、付款超过80%的合同、变更超过10%的合同、混凝土单价对比、还剩多少钱没付']])}
+async function renderPricesOld(){const projects=await db.projects.toArray(),contracts=await db.contracts.toArray(),files=await db.files.toArray(),all=await db.unitPrices.toArray(),q=state.priceFilter.keyword.toLowerCase(),rows=all.filter(r=>(!q||(r.description+r.specialty).toLowerCase().includes(q))&&(state.priceFilter.business==='全部业态'||r.businessType===state.priceFilter.business)&&(state.priceFilter.specialty==='全部专业'||r.specialty===state.priceFilter.specialty)),values=rows.map(r=>num(r.price)).filter(Boolean),avg=values.length?values.reduce((a,b)=>a+b,0)/values.length:0,min=values.length?Math.min(...values):0,max=values.length?Math.max(...values):0;$('#priceSpecialty').innerHTML='<option>全部专业</option>'+[...new Set(all.map(r=>r.specialty))].sort().map(x=>`<option ${x===state.priceFilter.specialty?'selected':''}>${esc(x)}</option>`).join('');$('#priceBusiness').value=state.priceFilter.business;$('#priceKeyword').value=state.priceFilter.keyword;$('#priceStats').innerHTML=[['匹配记录',rows.length,''],['最低价',min,'price-low'],['平均价',avg,''],['最高价',max,'price-high']].map((x,i)=>`<div class="stat"><span>${x[0]}</span><strong class="num ${x[2]}">${i?'¥ '+fmt(x[1]):x[1]+' 条'}</strong></div>`).join('');$('#priceRows').innerHTML=rows.length?rows.map(r=>{const p=projects.find(x=>x.projectId===r.projectId),c=contracts.find(x=>x.contractId===r.contractId),f=files.find(x=>x.fileId===r.fileId),judge=avg&&r.price>avg*1.15?'<span class="tag danger">偏高</span>':avg&&r.price<avg*.85?'<span class="tag residential">偏低</span>':'<span class="tag finished">正常</span>',exec=r.priceExecDate?new Date(r.priceExecDate):null,ageY=exec?(Date.now()-exec.getTime())/31557600000:0,stale=ageY>5,fees=[['人',r.laborFee],['材',r.materialFee],['辅',r.auxiliaryFee],['机',r.machineryFee],['利',r.profitFee]],feeCell=fees.some(x=>num(x[1]))?fees.map(x=>`${x[0]}${fmt(num(x[1]))}`).join('·'):'—';return `<tr><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td><td>${esc(r.description)}</td><td class="num editable${edited(r,'price')}" data-edit-price="${r.unitPriceId}">¥ ${fmt(r.price)} ${pencil}</td><td>${esc(r.unit)}</td><td class="num">${feeCell}</td><td>${esc(p?.projectName||'—')}<br><small class="num">${esc(c?.contractCode||'—')}</small></td><td>${esc(r.businessType)}</td><td>${esc(f?.fileName||r.fileName||'—')}</td><td class="num">${exec?exec.toLocaleDateString('zh-CN'):'—'}${stale?' <span class="tag danger">超5年</span>':''}</td><td>${judge}</td><td><button class="btn btn-outline btn-small" data-edit-price="${r.unitPriceId}">编辑</button></td></tr>`}).join(''):'<tr><td colspan="12">暂无匹配单价。请从合同卡片上传 Excel 或文本型 PDF 清单，或点击右上角「上传清单」单独入库。</td></tr>';$$('[data-edit-price]').forEach(b=>b.onclick=async()=>editPrice(await db.unitPrices.get(b.dataset.editPrice)))}function editPrice(r){openForm('编辑单价记录',field('specialty','专业类别',r.specialty)+field('itemCode','子目编码',r.itemCode)+`<div class="field full"><label for="m-description">单价描述（原文）</label><textarea id="m-description" name="description">${esc(r.description)}</textarea></div>`+field('price','综合单价（元）',r.price,'number')+field('quantity','数量',r.quantity,'number')+field('unit','单位',r.unit)+`<div class="field full"><label>组价构成（元）</label><small>人工 / 材料 / 辅材 / 机械 / 管理及利润</small></div>`+field('laborFee','人工费',r.laborFee,'number')+field('materialFee','材料费',r.materialFee,'number')+field('auxiliaryFee','辅材费',r.auxiliaryFee,'number')+field('machineryFee','机械费',r.machineryFee,'number')+field('profitFee','管理及利润费',r.profitFee,'number'),async v=>{const changed=Object.keys(v).filter(k=>String(r[k])!==String(v[k]));await db.unitPrices.update(r.unitPriceId,{...v,price:num(v.price),quantity:num(v.quantity),laborFee:num(v.laborFee),materialFee:num(v.materialFee),auxiliaryFee:num(v.auxiliaryFee),machineryFee:num(v.machineryFee),profitFee:num(v.profitFee),editedFields:[...new Set([...(r.editedFields||[]),...changed])]})})}
+async function savePriceFileOld(file){if(!file)return;const kind=/\.xlsx?$/i.test(file.name)?'excel':/\.pdf$/i.test(file.name)?'pdf':'scan';let rows=[];try{if(kind==='excel')rows=await parseExcel(file);else if(kind==='pdf')rows=await parsePdf(file)}catch(e){console.error(e);toast('文件解析失败，可打开原文件核对。',true);return}if(!rows.length){toast(kind==='scan'?'图片清单当前版本不进行OCR。':'未识别到完整的名称、单位和单价字段。',true);return}const projects=await db.projects.toArray();const proceed=p=>{const pendingRows=rows.map(r=>({...r,unitPriceId:uid('UP'),projectId:p?.projectId||'',contractId:'',fileId:'',fileName:file.name,businessType:p?.businessType||'',priceExecDate:new Date().toISOString().slice(0,10),createdAt:new Date().toISOString(),editedFields:[]}));state.pendingPrices=pendingRows;setTimeout(()=>showPricePreview(file.name),160)};if(projects.length){openForm('选择清单归属项目',field('projectName','归属项目',projects[0].projectName,'select',opts(projects.map(x=>x.projectName).concat(['不归属项目（独立归档）']),projects[0].projectName)),async v=>{const p=projects.find(x=>x.projectName===v.projectName)||null;proceed(p)})}else{proceed(null)}}async function answerQuestion(q){const cards=await allCards(),all=[];cards.forEach(({p,d})=>d.contracts.forEach(c=>all.push({p,c,x:calc(p,c,d.changes,d.payments,d.deductions)})));const rows=[];if(/付款到\s*(\d+(?:\.\d+)?)%/.test(q)){const target=num(q.match(/付款到\s*(\d+(?:\.\d+)?)%/)[1])/100;all.forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`结算 ¥${fmt(x.settleNet)} × ${pct(target)} = ¥${fmt(x.settleNet*target)}，已付 ¥${fmt(x.paidNet)}，还能付 ¥${fmt(x.settleNet*target-x.paidNet)}`]));showAnswer(`付款达到 ${pct(target)} 的可付余额`,rows)}else if(q.includes('超支')&&/最多|排名/.test(q)){cards.sort((a,b)=>(b.t.settleNet-b.p.targetCostNet)-(a.t.settleNet-a.p.targetCostNet)).forEach(({p,t})=>rows.push([p.projectName,`动态结算 ¥${fmt(t.settleNet)} − 目标成本 ¥${fmt(p.targetCostNet)} = ¥${fmt(t.settleNet-p.targetCostNet)}`]));showAnswer('项目超目标成本排名',rows)}else if(/付款.*超过\s*(\d+(?:\.\d+)?)%/.test(q)){const k=num(q.match(/超过\s*(\d+(?:\.\d+)?)%/)[1])/100;all.filter(v=>v.x.payRatio>k).forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`累计付款 ¥${fmt(x.paidNet)} ÷ 结算 ¥${fmt(x.settleNet)} = ${pct(x.payRatio)} > ${pct(k)}`]));showAnswer(`付款占比超过 ${pct(k)} 的合同`,rows)}else if(/变更.*超过\s*(\d+(?:\.\d+)?)%/.test(q)){const k=num(q.match(/超过\s*(\d+(?:\.\d+)?)%/)[1])/100;all.filter(v=>v.x.changeRatio>k).forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`变更 ¥${fmt(x.changeNet)} ÷ 合同 ¥${fmt(x.contractNet)} = ${pct(x.changeRatio)} > ${pct(k)}`]));showAnswer(`变更占比超过 ${pct(k)} 的合同`,rows)}else if(q.includes('单价')||q.includes('价格')){const key=q.replace(/单价对比|单价|价格|对比/g,'').trim(),ps=(await db.unitPrices.toArray()).filter(r=>!key||r.description.includes(key)),vals=ps.map(r=>num(r.price)).filter(Boolean),avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;ps.forEach(r=>rows.push([r.description,`${r.unit}｜¥${fmt(r.price)}｜${r.fileName}`]));showAnswer(`${key||'全部'}单价对比：最低 ¥${fmt(vals.length?Math.min(...vals):0)}，最高 ¥${fmt(vals.length?Math.max(...vals):0)}，均价 ¥${fmt(avg)}`,rows)}else if(q.includes('剩')&&q.includes('付')){all.forEach(({p,c,x})=>rows.push([`${p.projectName}｜${c.contractName}`,`结算 ¥${fmt(x.settleNet)} − 累计付款 ¥${fmt(x.paidNet)} = 剩余 ¥${fmt(x.remainingNet)}`]));showAnswer(`全部合同剩余未付 ¥${fmt(all.reduce((s,v)=>s+v.x.remainingNet,0))}`,rows)}else showAnswer('暂未识别该问题',[['可用问法','付款到85%还能付多少、哪个项目超支最多、付款超过80%的合同、变更超过10%的合同、混凝土单价对比、还剩多少钱没付']])}
 function showAnswer(title,rows){$('#assistantAnswer').classList.remove('hidden');$('#assistantAnswer').innerHTML=`<h3>${esc(title)}</h3>${rows.length?rows.map(r=>`<div class="answer-row"><b>${esc(r[0])}</b><span>${esc(r[1])}</span></div>`).join(''):'<p>没有符合条件的数据。</p>'}`}
 async function exportProject(d){if(!window.XLSX){toast('Excel 导出组件未加载。',true);return}const wb=XLSX.utils.book_new(),p=d.project;XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet([p]),'项目');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.contracts.map(c=>({...c,nodes:JSON.stringify(c.nodes),...calc(p,c,d.changes,d.payments,d.deductions)}))),'合同动态分析');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.changes),'变更');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.deductions),'结算扣减');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.payments),'付款分期');XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(d.unitPrices),'单价库');XLSX.writeFile(wb,`${p.projectCode}-${p.projectName}-造价数据库.xlsx`)}
 async function monthlyReport(projectId){let sets;if(projectId){const d=await projectData(projectId);sets=[{p:d.project,d}]}else sets=await allCards();const month=today().slice(0,7),body=sets.map(({p,d})=>{const t=totals(d),rate=t.contractNet?t.contractTax/t.contractNet-1:.09,targetTax=num(p.targetCostNet)*(1+rate),cs=d.contracts.map(c=>{const x=calc(p,c,d.changes,d.payments,d.deductions),ps=d.payments.filter(v=>v.contractId===c.contractId).sort((a,b)=>String(a.paymentDate).localeCompare(String(b.paymentDate))),nextTax=ps.length?num(ps.at(-1).amount):0;return {c,x,nextTax}}),mc=d.changes.filter(v=>v.changeDate?.startsWith(month)),monthChangeTax=mc.reduce((s,v)=>s+num(v.amountTax),0),allChangeTax=d.changes.filter(v=>v.auditStatus==='已审').reduce((s,v)=>s+num(v.amountTax),0),risks=cs.flatMap(({c,x})=>warning(x).map(w=>`${c.contractName}：${w.text}`)),groups={};d.unitPrices.forEach(v=>(groups[v.description]??=[]).push(v));const priceRows=Object.values(groups).filter(g=>g.length>1).map(g=>{const vals=g.map(v=>num(v.price)),avg=vals.reduce((a,b)=>a+b,0)/vals.length;return `<tr><td>${esc(g[0].description)}</td><td>${g.length}</td><td>¥${fmt(Math.min(...vals))}</td><td>¥${fmt(avg)}</td><td>¥${fmt(Math.max(...vals))}</td></tr>`}).join('');return `<section><h2>${esc(p.projectName)}（${esc(p.projectCode)}）</h2><p>状态：${p.status}｜业态：${p.businessType}｜建筑面积：${fmt(p.buildingArea)}㎡</p><h3>一、本期项目概况</h3><table><tr><th>目标成本</th><th>合同总额</th><th>动态结算</th><th>超目标成本</th></tr><tr><td>不含税 ¥${fmt(p.targetCostNet)}<br><small>含税 ¥${fmt(targetTax)}</small></td><td>不含税 ¥${fmt(t.contractNet)}<br><small>含税 ¥${fmt(t.contractTax)}</small></td><td>不含税 ¥${fmt(t.settleNet)}<br><small>含税 ¥${fmt(t.settleTax)}</small></td><td>不含税 ¥${fmt(t.settleNet-num(p.targetCostNet))}<br><small>含税 ¥${fmt(t.settleTax-targetTax)}</small></td></tr></table><h3>二、合同执行情况</h3><table><tr><th>合同</th><th>合同金额</th><th>动态结算</th><th>剩余未付</th><th>变更占比</th></tr>${cs.map(({c,x})=>`<tr><td>${esc(c.contractName)}${x.settlementOverridden?' *人工纠偏':''}</td><td>不含税 ¥${fmt(x.contractNet)}<br><small>含税 ¥${fmt(x.contractTax)}</small></td><td>不含税 ¥${fmt(x.settleNet)}<br><small>含税 ¥${fmt(x.settleTax)}</small></td><td>不含税 ¥${fmt(x.remainingNet)}<br><small>含税 ¥${fmt(x.remainingTax)}</small></td><td>${pct(x.changeRatio)}</td></tr>`).join('')}</table><h3>三、付款进度与下月预计</h3><table><tr><th>合同</th><th>累计付款</th><th>付款占比</th><th>下月预计</th></tr>${cs.map(({c,x,nextTax})=>`<tr><td>${esc(c.contractName)}</td><td>不含税 ¥${fmt(x.paidNet)}<br><small>含税 ¥${fmt(x.paidTax)}</small></td><td>${pct(x.payRatio)}</td><td>按最近一期估算：不含税 ¥${fmt(nextTax/(1+x.rate))}<br><small>含税 ¥${fmt(nextTax)}</small></td></tr>`).join('')}</table><h3>四、变更汇总</h3><p>本期变更 ${mc.length} 份：不含税 ¥${fmt(monthChangeTax/(1+rate))}，含税 ¥${fmt(monthChangeTax)}；累计已审变更不含税 ¥${fmt(allChangeTax/(1+rate))}，含税 ¥${fmt(allChangeTax)}，占合同总额 ${pct(t.contractTax?allChangeTax/t.contractTax:0)}。</p><h3>五、异常风险提示</h3><ul>${risks.length?risks.map(v=>`<li>${esc(v)}</li>`).join(''):'<li>未发现规则内异常</li>'}</ul><h3>六、单价对比分析</h3>${priceRows?`<table><tr><th>分项描述</th><th>样本数</th><th>最低价</th><th>平均价</th><th>最高价</th></tr>${priceRows}</table>`:`<p>已收录 ${d.unitPrices.length} 条可追溯单价，暂无两个以上同类样本可形成区间对比。</p>`}</section>`}).join('');const html=`<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>衡价云月报</title><style>body{font-family:SimSun,serif;color:#000;margin:30px}h1,h2{border-bottom:2px solid #16745f;padding-bottom:8px}table{border-collapse:collapse;width:100%;margin:12px 0 20px}th,td{border:1px solid #aaa;padding:8px;text-align:right}th:first-child,td:first-child{text-align:left}small{color:#444}@media print{button{display:none}}</style><body><h1>衡价云项目造价月报｜${month}</h1><button onclick="print()">打印 / 另存为 PDF</button>${body}</body></html>`;download(`衡价云造价月报-${month}.html`,html,'text/html')}
@@ -108,10 +698,10 @@ async function monthlyReportExcel(projectId){if(!window.XLSX){toast('Excel 导�
 async function monthlyReportExcelComplete(projectId){if(!window.XLSX){toast('Excel 导出组件未加载。',true);return}let sets;if(projectId){const d=await projectData(projectId);sets=[{p:d.project,d}]}else sets=await allCards();const wb=XLSX.utils.book_new(),summary=[],contracts=[],paymentPlan=[],changes=[],risks=[],prices=[];for(const {p,d} of sets){const t=totals(d);summary.push({项目编号:p.projectCode,项目名称:p.projectName,业态:p.businessType,状态:p.status,'建筑面积㎡':num(p.buildingArea),目标成本不含税元:num(p.targetCostNet),合同总额不含税元:t.contractNet,合同总额含税元:t.contractTax,动态结算不含税元:t.settleNet,动态结算含税元:t.settleTax,累计付款不含税元:t.paidNet,累计付款含税元:t.paidTax,付款占比:t.settleNet?t.paidNet/t.settleNet:0,超目标成本不含税元:t.settleNet-num(p.targetCostNet)});for(const c of d.contracts){const x=calc(p,c,d.changes,d.payments,d.deductions),ps=d.payments.filter(v=>v.contractId===c.contractId).sort((a,b)=>String(a.paymentDate).localeCompare(String(b.paymentDate))),nextTax=ps.length?num(ps.at(-1).amount):0;contracts.push({项目编号:p.projectCode,项目名称:p.projectName,合同编号:c.contractCode,合同名称:c.contractName,合同类型:c.contractType,上级合同ID:c.parentContractId||'',合同不含税元:x.contractNet,合同含税元:x.contractTax,结算基准不含税元:x.baseNet,变更累计不含税元:x.changeNet,扣减累计不含税元:x.deductionNet,动态结算不含税元:x.settleNet,动态结算含税元:x.settleTax,'结算单方元每㎡':x.settleUnitNet,是否人工纠偏:x.settlementOverridden?'是':'否',纠偏依据:c.settlementOverrideReason||'',累计付款不含税元:x.paidNet,累计付款含税元:x.paidTax,付款占比:x.payRatio,下月预计不含税元:nextTax/(1+x.rate),下月预计含税元:nextTax,剩余未付不含税元:x.remainingNet,变更占比:x.changeRatio});warning(x).forEach(w=>risks.push({项目:p.projectName,合同:c.contractName,级别:w.level==='danger'?'红色异常':'黄色预警',风险:w.text,月份:today().slice(0,7)}));ps.forEach(v=>paymentPlan.push({项目编号:p.projectCode,合同编号:c.contractCode,合同名称:c.contractName,期数:v.period,日期:v.paymentDate,累计产值含税元:num(v.outputCumulativeTax),当月付款含税元:num(v.currentPaymentTax),保函扣减含税元:num(v.deductionGuaranteeTax),罚款扣减含税元:num(v.deductionPenaltyTax),其他扣减含税元:num(v.deductionOtherTax),本期实付含税元:num(v.amount),付款节点:v.nodeName,扣减原因:v.deductionReason,备注:v.note}))}d.changes.forEach(v=>changes.push({项目编号:p.projectCode,项目名称:p.projectName,合同编号:d.contracts.find(c=>c.contractId===v.contractId)?.contractCode||'',变更编号:v.changeCode,变更类型:v.changeType,变更金额含税元:num(v.amountTax),审定状态:v.auditStatus,变更日期:v.changeDate,是否本月:v.changeDate?.startsWith(today().slice(0,7))?'是':'否'}));d.unitPrices.forEach(v=>prices.push({项目编号:p.projectCode,项目名称:p.projectName,合同编号:d.contracts.find(c=>c.contractId===v.contractId)?.contractCode||'',专业:v.specialty,单价描述:v.description,单价元:num(v.price),单位:v.unit,来源文件:v.fileName,录入时间:v.createdAt}))}const add=(rows,name)=>XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{说明:'暂无数据'}]),name);add(summary,'项目概况');add(contracts,'合同执行');add(paymentPlan,'付款进度');add(changes,'变更汇总');add(risks,'异常风险');add(prices,'单价对比');XLSX.writeFile(wb,`${projectId?sets[0].p.projectCode+'-':''}衡价云造价月报-${today().slice(0,7)}.xlsx`)}
 monthlyReportExcel=monthlyReportExcelComplete;
 async function blobToDataURL(blob){return new Promise((res,rej)=>{const r=new FileReader;r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob)})}function dataURLtoBlob(s){const[h,b]=s.split(','),m=h.match(/:(.*?);/)[1],u=atob(b),a=new Uint8Array(u.length);for(let i=0;i<u.length;i++)a[i]=u.charCodeAt(i);return new Blob([a],{type:m})}
-async function exportAll(){const files=await db.files.toArray(),data={version:3,exportedAt:new Date().toISOString(),projects:await db.projects.toArray(),contracts:await db.contracts.toArray(),changes:await db.changes.toArray(),payments:await db.payments.toArray(),deductions:await db.deductions.toArray(),unitPrices:await db.unitPrices.toArray(),files:await Promise.all(files.map(async({fileBlob,...f})=>({...f,fileData:fileBlob?await blobToDataURL(fileBlob):null})))};download(`hengjiayun-backup-${today()}.json`,JSON.stringify(data),'application/json')}
-async function importAll(file){let data;try{data=JSON.parse(await file.text())}catch{toast('JSON 文件无法解析。',true);return}if(!data.projects||!data.contracts){toast('不是有效的衡价云备份文件。',true);return}if(!confirm(`将导入 ${data.projects.length} 个项目并替换当前全部本地数据。是否继续？`))return;await db.transaction('rw',db.tables,async()=>{for(const t of db.tables)await t.clear();await db.projects.bulkAdd(data.projects||[]);await db.contracts.bulkAdd(data.contracts||[]);await db.changes.bulkAdd(data.changes||[]);await db.payments.bulkAdd(data.payments||[]);await db.deductions.bulkAdd(data.deductions||[]);await db.unitPrices.bulkAdd(data.unitPrices||[]);await db.files.bulkAdd((data.files||[]).map(({fileData,...f})=>({...f,fileBlob:fileData?dataURLtoBlob(fileData):null}))) });await normalize();toast('全部数据已导入并实时重算。');render()}
+async function exportAll(){const files=await db.files.toArray(),data={version:5,exportedAt:new Date().toISOString(),projects:await db.projects.toArray(),contracts:await db.contracts.toArray(),changes:await db.changes.toArray(),payments:await db.payments.toArray(),deductions:await db.deductions.toArray(),unitPrices:await db.unitPrices.toArray(),materials:await db.materials.toArray(),sourceTemplates:await db.sourceTemplates.toArray(),files:await Promise.all(files.map(async({fileBlob,...f})=>({...f,fileData:fileBlob?await blobToDataURL(fileBlob):null})))};download(`hengjiayun-backup-${today()}.json`,JSON.stringify(data),'application/json')}
+async function importAll(file){let data;try{data=JSON.parse(await file.text())}catch{toast('JSON 文件无法解析。',true);return}if(!data.projects||!data.contracts){toast('不是有效的衡价云备份文件。',true);return}if(!confirm(`将导入 ${data.projects.length} 个项目并替换当前全部本地数据。是否继续？`))return;await db.transaction('rw',db.tables,async()=>{for(const t of db.tables)await t.clear();await db.projects.bulkAdd(data.projects||[]);await db.contracts.bulkAdd(data.contracts||[]);await db.changes.bulkAdd(data.changes||[]);await db.payments.bulkAdd(data.payments||[]);await db.deductions.bulkAdd(data.deductions||[]);await db.unitPrices.bulkAdd(data.unitPrices||[]);await db.materials.bulkAdd(data.materials||[]);await db.sourceTemplates.bulkAdd(data.sourceTemplates||[]);await db.files.bulkAdd((data.files||[]).map(({fileData,...f})=>({...f,fileBlob:fileData?dataURLtoBlob(fileData):null}))) });await normalize();toast('全部数据已导入并实时重算。');render()}
 function download(name,text,type){const u=URL.createObjectURL(new Blob([text],{type:`${type};charset=utf-8`})),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),30000)}function openModal(id){const m=$('#'+id);m.classList.add('show');m.querySelector('input,select,button')?.focus()}function setSavingUI(active){state.saving=active;const form=$('#genericForm'),save=$('#modalSaveBtn');form?.classList.toggle('is-saving',active);form?.setAttribute('aria-busy',active?'true':'false');if(save){save.disabled=active;save.textContent=active?'保存并重算中…':'保存并重算'}}function closeModals(force=false){if(state.saving&&force!==true)return;$$('.modal-backdrop.show').forEach(x=>x.classList.remove('show'))}function toast(msg,error=false){const t=$('#toast');t.textContent=msg;t.className=`toast show${error?' error':''}`;clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.className='toast',3800)}function checkOverflow(){$$('.scroll-shell').forEach(s=>{const x=s.querySelector('.table-scroll');if(x)s.classList.toggle('is-overflowing',x.scrollWidth>x.clientWidth+2)})}
-$('#genericForm').onsubmit=async e=>{e.preventDefault();if(!state.modalAction||state.saving)return;const action=state.modalAction,values=Object.fromEntries(new FormData(e.target));let dataSaved=false;setSavingUI(true);try{await action(values);dataSaved=true;const rendered=await refreshCurrentView();if(rendered===false)throw new Error('页面状态已经变化，请重新打开当前记录后再保存');closeModals(true);toast('数据已保存，关联指标已更新。')}catch(err){console.error('保存或重算失败',err);toast(dataSaved?`数据已保存，但页面更新失败：${err.message||'请刷新页面核对'}`:`保存未完成：${err.message||'请检查数据后重试'}`,true)}finally{setSavingUI(false)}};$('#confirmPriceImport').onclick=async()=>{await db.unitPrices.bulkAdd(state.pendingPrices);const n=state.pendingPrices.length;state.pendingPrices=[];closeModals();toast(`已将 ${n} 条清单单价写入单价库。`);state.projectId?renderProject():renderHome()};$$('[data-close]').forEach(b=>b.onclick=closeModals);$$('.modal-backdrop').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals()});window.addEventListener('popstate',()=>render().catch(handleRenderError));window.addEventListener('resize',checkOverflow);window.addEventListener('unhandledrejection',e=>{console.error('未处理的异步错误',e.reason);toast('页面更新未完成，请保持当前页面并重试。',true)});function handleRenderError(err){console.error('页面更新失败',err);toast(`页面更新失败：${err.message||'请刷新后重试'}`,true)}
+$('#genericForm').onsubmit=async e=>{e.preventDefault();if(!state.modalAction||state.saving)return;const action=state.modalAction,values=Object.fromEntries(new FormData(e.target));let dataSaved=false;setSavingUI(true);try{await action(values);dataSaved=true;const rendered=await refreshCurrentView();if(rendered===false)throw new Error('页面状态已经变化，请重新打开当前记录后再保存');closeModals(true);toast('数据已保存，关联指标已更新。')}catch(err){console.error('保存或重算失败',err);toast(dataSaved?`数据已保存，但页面更新失败：${err.message||'请刷新页面核对'}`:`保存未完成：${err.message||'请检查数据后重试'}`,true)}finally{setSavingUI(false)}};$('#confirmPriceImport').onclick=()=>confirmPriceImportEnhanced();$$('[data-close]').forEach(b=>b.onclick=closeModals);$$('.modal-backdrop').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals()});window.addEventListener('popstate',()=>render().catch(handleRenderError));window.addEventListener('resize',checkOverflow);window.addEventListener('unhandledrejection',e=>{console.error('未处理的异步错误',e.reason);toast('页面更新未完成，请保持当前页面并重试。',true)});function handleRenderError(err){console.error('页面更新失败',err);toast(`页面更新失败：${err.message||'请刷新后重试'}`,true)}
 $('#newProjectBtn').onclick=()=>openForm('新建项目',field('projectCode','项目编号','')+field('projectName','项目名称','')+field('location','地点','')+field('businessType','业态','住宅','select',opts(['办公','住宅','商业综合体'],'住宅'))+field('targetCostNet','目标成本（不含税，元）',0,'number')+field('buildingArea','建筑面积（㎡）',0,'number')+field('status','状态','在建','select',opts(['在建','完工','归档'],'在建')),async v=>{if(await db.projects.where('projectCode').equals(v.projectCode).first())throw new Error('项目编号已存在');await db.projects.add({projectId:uid('P'),...v,targetCostNet:num(v.targetCostNet),buildingArea:num(v.buildingArea),createdAt:new Date().toISOString(),editedFields:[]})});$('#exportJsonBtn').onclick=exportAll;$('#importJsonInput').onchange=e=>importAll(e.target.files[0]);$('#monthlyReportBtn').onclick=()=>monthlyReport();$('#monthlyExcelBtn').onclick=()=>monthlyReportExcel();$('#resetDemoBtn').onclick=resetDemo;$('#priceSearchForm').onsubmit=e=>{e.preventDefault();state.priceFilter={keyword:$('#priceKeyword').value.trim(),business:$('#priceBusiness').value,specialty:$('#priceSpecialty').value};renderPrices();requestAnimationFrame(checkOverflow)};$('#exportPriceBtn').onclick=async()=>{if(!window.XLSX){toast('Excel 组件未加载。',true);return}const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(await db.unitPrices.toArray()),'单价库');XLSX.writeFile(wb,`衡价云单价库-${today()}.xlsx`)};
 $('#priceFileInput').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)savePriceFile(f)};
 const examples=['所有合同付款到85%还能付多少','哪个项目超支最多','付款超过80%的合同有哪些','变更超过10%的合同','混凝土单价对比','还剩多少钱没付'];$('#assistantExamples').innerHTML=examples.map(x=>`<button type="button" class="example-chip">${x}</button>`).join('');$$('.example-chip').forEach(b=>b.onclick=()=>{$('#assistantInput').value=b.textContent;$('#assistantForm').requestSubmit()});$('#assistantForm').onsubmit=e=>{e.preventDefault();answerQuestion($('#assistantInput').value.trim())};
