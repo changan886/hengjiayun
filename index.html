@@ -137,6 +137,7 @@ tr.row-over:hover>td{background:#fff2d8}
 <section class="library-panel panel" id="priceLibrary"><div class="section-head"><div><span class="eyebrow">跨项目价格资产</span><h2>单价库</h2><p>只收录上传清单中的原始分项数据，可追溯项目、合同和源文件。</p></div><button class="btn btn-outline" id="dictBtn">物料字典</button><button class="btn btn-outline" id="tplBtn">导入模板</button><button class="btn btn-outline" id="exportPriceBtn">导出 Excel</button><label class="btn btn-primary" for="priceFileInput">上传清单</label><input class="file-input" id="priceFileInput" type="file" accept=".xlsx,.xls,.pdf"></div><form class="search-grid" id="priceSearchForm"><input id="priceKeyword" placeholder="搜索分项名称、标准物料、别名、品牌或型号"><select id="priceBusiness"><option>全部业态</option><option>办公</option><option>住宅</option><option>商业综合体</option></select><select id="priceSpecialty"><option>全部专业</option></select><select id="pricePriceType"><option>全部类型</option></select><select id="priceSupply"><option>全部供应</option></select><label class="dev-ctl" title="偏离率预警阈值">±<input type="number" id="devThreshold" min="1" max="100" step="1" value="10">%</label><label class="dev-ctl"><input type="checkbox" id="onlyOver"> 只看超阈值</label><button class="btn btn-primary">查询单价</button></form><div class="price-stats" id="priceStats"></div><div class="type-stats" id="priceTypeStats"></div><div class="price-groups" id="priceGroups"></div><details class="pv-block detail-all"><summary><b>全部明细</b>　结论看上方，需要逐条核对时展开这里</summary><div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>专业</th><th>子目编码</th><th>描述（原文）</th><th class="num">成交价</th><th>单位</th><th class="num">信息价</th><th class="num">偏离率</th><th>品牌 / 型号</th><th>供应方式</th><th>价格类型</th><th>项目</th><th>判断</th><th>操作</th></tr></thead><tbody id="priceRows"></tbody></table></div><div class="scroll-hint">← 横向滑动查看更多 →</div></div></details></section>
 <section class="library-panel panel" id="infoLibrary"><div class="section-head"><div><span class="eyebrow">官方基准价</span><h2>信息价库</h2><p>造价管理部门发布的材料基准价，按期归档；与成交价对比用于报审合理性判断。</p></div>
 <button class="btn btn-outline" id="matchBtn">材料对照</button>
+<button class="btn btn-outline" id="autoMatchBtn">批量匹配物料</button>
 <button class="btn btn-outline" id="infoSyncBtn">网络同步</button>
 <button class="btn btn-outline" id="infoExportBtn">导出 Excel</button>
 <label class="btn btn-primary" for="infoFileInput">导入信息价</label>
@@ -1292,14 +1293,37 @@ async function confirmInfoImport(){
   for(const r of rows){
     const k=key(r);if(seen.has(k))continue;seen.add(k);
     const old=byKey.get(k);
+    /* 自动匹配物料字典：优先用官方编码→再按名称匹配 */
+    let matId=codeToMat.get(String(r.sourceCode))||old?.matId||'';
+    if(!matId){
+      const cds=matCandidates(r.name,mats,1);
+      if(cds.length&&cds[0].score>=52)matId=cds[0].m.matId;
+    }
     put.push({...r,infoPriceId:old?old.infoPriceId:uid('IP'),
-      matId:codeToMat.get(String(r.sourceCode))||old?.matId||'',
+      matId,
       createdAt:old?old.createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
   }
   await db.infoPrices.bulkPut(put);
   state.pendingInfo=[];closeModals(true);bindConfirm('price');
-  toast(`信息价已写入 ${put.length} 条。`);
+  const matched=put.filter(p=>p.matId).length;
+  toast(`信息价已写入 ${put.length} 条，${matched} 条已自动匹配物料。`);
   renderInfoLib();renderPrices();
+}
+/* 批量匹配：给所有 matId 为空的信息价跑一轮物料字典匹配 */
+async function autoMatchMaterials(){
+  const ips=await db.infoPrices.where('matId').equals('').or('matId').equals(undefined).toArray();
+  if(!ips.length){toast('所有信息价已匹配，无需操作。');return}
+  const mats=await db.materials.toArray();
+  const updates=[];let matched=0;
+  for(const ip of ips){
+    const cds=matCandidates(ip.name,mats,1);
+    if(cds.length&&cds[0].score>=52){updates.push({infoPriceId:ip.infoPriceId,matId:cds[0].m.matId});matched++}
+  }
+  if(updates.length){
+    await db.infoPrices.bulkPut(updates);
+    toast(`批量匹配完成：${ips.length} 条中 ${matched} 条匹配到物料字典。`);
+  } else toast(`${ips.length} 条均未匹配到，请检查物料字典是否完整。`,true);
+  renderInfoLib();
 }
 
 /* ---------- 对比计算 ---------- */
@@ -1660,6 +1684,7 @@ async function fetchSyncUrl(url,idx){
 /* ---------- 绑定 ---------- */
 $('#infoFileInput')&&($('#infoFileInput').onchange=e=>{const f=e.target.files[0];e.target.value='';importInfoPriceFile(f)});
 $('#matchBtn')&&($('#matchBtn').onclick=()=>openMatchManager());
+$('#autoMatchBtn')&&($('#autoMatchBtn').onclick=()=>autoMatchMaterials());
 $('#infoExportBtn')&&($('#infoExportBtn').onclick=()=>exportInfoPrices());
 $('#infoSyncBtn')&&($('#infoSyncBtn').onclick=()=>openSyncManager());
 $('#infoSearchForm')&&($('#infoSearchForm').onsubmit=e=>{e.preventDefault();state.infoFilter.keyword=$('#infoKeyword').value;renderInfoLib()});
