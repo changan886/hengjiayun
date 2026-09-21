@@ -829,19 +829,7 @@ async function showPricePreview(name){
       const g=state.pendingGroups[+s.dataset.gidx];
       if(s.value==='__custom__'){
         const gidx=+s.dataset.gidx;
-        const tr=s.closest('tr');
-        const inp=document.createElement('input');
-        inp.type='text';inp.className='pv-custom-input';inp.dataset.gidx=gidx;
-        inp.value=g.raw;inp.placeholder='输入物料名称，回车确认';
-        inp.style.cssText='width:70%;min-height:34px;border:1px solid var(--jade);border-radius:6px;padding:5px 8px;font:inherit';
-        const btn=document.createElement('button');
-        btn.className='btn btn-small btn-primary';btn.textContent='添加';btn.dataset.gidx=gidx;
-        btn.style.cssText='margin-left:6px';
-        const cell=tr.querySelector('td:nth-child(3)');
-        cell.innerHTML='';cell.appendChild(inp);cell.appendChild(btn);
-        const doCreate=()=>createAndAssignCustomMat(+btn.dataset.gidx);
-        btn.onclick=doCreate;inp.onkeydown=e=>{if(e.key==='Enter')doCreate()};
-        inp.focus();
+        openCustomMatForm(gidx);
       } else {
         g.matId=s.value;g.manual=true;
       }
@@ -850,16 +838,43 @@ async function showPricePreview(name){
   bindConfirm('price');
   openModal('previewModal');
 }
-async function createAndAssignCustomMat(gidx){
+async function openCustomMatForm(gidx){
   const g=state.pendingGroups[gidx];if(!g)return;
-  const inp=document.querySelector(`.pv-custom-input[data-gidx="${gidx}"]`);
-  const name=(inp?inp.value:g.raw).trim();
-  if(!name){toast('请输入物料名称。',true);return}
-  const matId='mat-'+Date.now();
-  await db.materials.add({matId,stdName:name,categoryL1:'',categoryL2:'',stdUnit:'',keys:[name],spec:'',aliases:[],builtin:false,hits:0,createdAt:new Date().toISOString()});
-  g.matId=matId;g.manual=true;
-  toast(`已创建物料「${name}」并归一。`);
-  showPricePreview(state.parseFileName);
+  /* 从已有物料中提取分类和单位的候选值 */
+  const allMats=await db.materials.toArray();
+  const cat1Opts=[...new Set(allMats.map(m=>m.categoryL1).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
+  const cat2Opts=[...new Set(allMats.map(m=>m.categoryL2).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
+  const unitOpts=[...new Set(allMats.map(m=>m.stdUnit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
+  const mkOpts=arr=>'<option value="">请选择</option>'+arr.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  openForm('新建自定义物料',
+    field('stdName','物料名称',g.raw)+
+    field('categoryL1','一级分类','',cat1Opts.length?'select':'','')+
+    field('categoryL2','二级分类','',cat2Opts.length?'select':'','')+
+    field('stdUnit','标准单位','',unitOpts.length?'select':'','')+
+    field('spec','规格型号','')+
+    field('aliases','别名（逗号分隔）',g.raw),
+    async v=>{
+      if(!v.stdName||!v.stdName.trim()){toast('请输入物料名称。',true);return}
+      const matId='mat-'+Date.now();
+      const name=v.stdName.trim();
+      const cat1=v.categoryL1||'',cat2=v.categoryL2||'',unit=v.stdUnit||'',spec=v.spec||'';
+      const aliases=v.aliases?v.aliases.split(/[,，]/).map(s=>s.trim()).filter(Boolean):[];
+      const keys=[name,...aliases].filter(Boolean);
+      await db.materials.add({matId,stdName:name,categoryL1:cat1,categoryL2:cat2,stdUnit:unit,keys:keys,spec:spec,aliases:aliases,builtin:false,hits:0,createdAt:new Date().toISOString()});
+      g.matId=matId;g.manual=true;
+      toast(`已创建物料「${name}」并归一。`);
+      showPricePreview(state.parseFileName);
+    }
+  );
+  /* 延迟填充自定义 select 选项（openForm 渲染后） */
+  setTimeout(()=>{
+    const sels=document.querySelectorAll('#genericForm select');
+    sels.forEach(sel=>{
+      if(sel.name==='categoryL1'&&cat1Opts.length){sel.innerHTML=mkOpts(cat1Opts)}
+      if(sel.name==='categoryL2'&&cat2Opts.length){sel.innerHTML=mkOpts(cat2Opts)}
+      if(sel.name==='stdUnit'&&unitOpts.length){sel.innerHTML=mkOpts(unitOpts)}
+    });
+  },100);
 }
 async function confirmPriceImportEnhanced(){
   const groups=state.pendingGroups||[],byKey=new Map(groups.map(g=>[g.key,g]));
