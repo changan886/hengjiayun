@@ -126,6 +126,28 @@ tr.row-over:hover>td{background:#fff2d8}
 .trend-chart .spark{width:100%;height:150px}
 .trend-chart .spark-line{stroke-width:2.2}
 .mt-sel{max-width:340px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+/* 单价分析展开行 */
+.price-detail-row td{background:#f6faf8;padding:14px 18px !important}
+.fee-breakdown-wrap{border:1px solid #d4e5dd;border-radius:10px;padding:14px 16px;background:#fff}
+.fee-breakdown-title{font-weight:600;color:var(--ink);margin-bottom:10px;font-size:14px}
+.fee-breakdown-grid{display:grid;grid-template-columns:1fr 220px 240px;gap:18px;align-items:start}
+.fee-bar-item{display:grid;grid-template-columns:72px 1fr 90px 52px;gap:8px;align-items:center;margin-bottom:7px;font-size:13px}
+.fee-lab{color:#555}
+.fee-bar-track{height:14px;background:#eef2f0;border-radius:7px;overflow:hidden}
+.fee-bar-fill{height:100%;border-radius:7px;min-width:2px;transition:width .3s}
+.fee-val{text-align:right;font-weight:500}
+.fee-pct{color:#888;text-align:right;font-size:12px}
+.fee-side{border-left:1px solid #e4ebe7;padding-left:16px}
+.fee-total-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #e4ebe7;font-size:13px}
+.fee-total-row b{color:var(--jade)}
+.fee-ok{font-size:12px;color:var(--jade);margin-top:8px}
+.fee-warn{font-size:12px;color:var(--danger);margin-top:8px}
+.fee-empty{color:#888;font-size:13px;padding:8px 0}
+.fee-cmp-box{background:#f4f9f6;border:1px solid #d8e8e0;border-radius:8px;padding:10px 12px}
+.fee-cmp-title{font-weight:600;font-size:13px;color:var(--jade);margin-bottom:8px}
+.fee-cmp-row{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0}
+.cell-toggle{user-select:none}
+@media(max-width:1100px){.fee-breakdown-grid{grid-template-columns:1fr}.fee-side{border-left:none;padding-left:0;border-top:1px solid #e4ebe7;padding-top:12px}}
 </style></head><body>
 <section class="lock-screen" id="passwordGate"><form class="lock-card" id="lockForm"><div class="lock-brand"><div class="brand-mark">衡</div><div><h1>进入衡价云</h1><p>多项目造价管理数据库</p></div></div><div class="field"><label for="passwordInput">访问密码</label><div class="password-wrap"><input id="passwordInput" type="password" autocomplete="current-password" required><button class="password-toggle" id="passwordToggle" type="button">显示</button></div></div><div class="lock-error" id="lockError" role="alert"></div><button class="btn btn-primary lock-submit">解锁并进入</button><small class="lock-hint">密码提示：我的 GitHub 用户名</small></form></section>
 <div id="appShell" class="hidden"><header class="appbar"><div class="appbar-inner"><div class="brand"><div class="brand-mark">衡</div><div><strong>衡价云</strong><small>项目造价数据库</small></div></div><div class="appbar-context" id="appbarContext"></div><div class="appbar-actions" id="appbarActions"></div></div></header><main class="page">
@@ -1000,17 +1022,71 @@ async function renderPrices(){
       :`<b class="${cmp.dev>0?'dev-up':'dev-down'}">${cmp.dev>0?'+':''}${(cmp.dev*100).toFixed(1)}%</b>`
         +(over?' <span class="tag danger">超阈值</span>':'')
         +(cmp.cal.ok?`<br><small class="mat-tag">${cmp.using==='materialFee'?'按材料费对标':'纯材料单价'}</small>`:`<br><small class="cal-warn">${esc(cmp.cal.note)}</small>`);
-    return `<tr class="${over?'row-over':''}"><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td>
-      <td>${esc(r.description).slice(0,100)}${mn?`<br><small class="mat-tag">→ ${esc(mn)}</small>`:'<br><small class="mat-tag none">未归一</small>'}</td>
+    return `<tr class="price-main ${over?'row-over':''}" data-toggle-row="${r.unitPriceId}"><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td>
+      <td class="cell-toggle">${esc(r.description).slice(0,100)}${mn?`<br><small class="mat-tag">→ ${esc(mn)}</small>`:'<br><small class="mat-tag none">未归一</small>'}</td>
       <td class="num editable${edited(r,'price')}" data-edit-price="${r.unitPriceId}">¥ ${fmt(r.price)} ${pencil}</td>
       <td>${esc(r.unit)}</td><td class="num">${infoCell}</td><td class="num">${devCell}</td>
       <td>${esc([r.brand,r.model].filter(Boolean).join(' / ')||'—')}</td>
       <td>${esc(r.supplyType||'—')}</td><td>${esc(r.priceType||'合同清单')}</td>
       <td>${esc(p?.projectName||'—')}<br><small>${esc(fl?.fileName||r.fileName||'—')}</small></td>
-      <td>${judge}</td><td><button class="btn btn-outline btn-small" data-edit-price="${r.unitPriceId}">编辑</button></td></tr>`}).join('')
+      <td>${judge}</td><td><button class="btn btn-outline btn-small" data-edit-price="${r.unitPriceId}">编辑</button></td></tr>
+      <tr class="price-detail-row" id="pdr-${r.unitPriceId}" hidden><td colspan="13">${feeBreakdown(r,cmp)}</td></tr>`}).join('')
     +(rows.length>600?`<tr><td colspan="13" class="pg-more">共 ${rows.length} 条，明细表显示前 600 条；用上方筛选缩小范围，或看分组结论。</td></tr>`:'')
     :'<tr><td colspan="13">暂无匹配单价。点右上角「上传清单」入库，或用「导入数据」载入单价库导入包。</td></tr>';
-  $$('[data-edit-price]').forEach(b=>b.onclick=async()=>editPrice(await db.unitPrices.get(b.dataset.editPrice)));
+  $$('[data-edit-price]').forEach(b=>b.onclick=async ev=>{ev.stopPropagation();editPrice(await db.unitPrices.get(b.dataset.editPrice))});
+  /* 点击行展开/收起单价分析 */
+  $$('.price-main').forEach(tr=>{
+    tr.style.cursor='pointer';
+    tr.onclick=e=>{
+      if(e.target.closest('[data-edit-price]')||e.target.closest('.editable'))return;
+      const id=tr.dataset.toggleRow,d=$('#pdr-'+id);
+      if(d)d.hidden=!d.hidden;
+    }
+  });
+}
+/* 单价分析：人材机拆分条 + 信息价对标 */
+function feeBreakdown(r,cmp){
+  const items=[
+    ['人工费',r.laborFee,'var(--amber)'],
+    ['材料费',r.materialFee,'var(--jade)'],
+    ['辅材费',r.auxiliaryFee,'#7c9885'],
+    ['机械费',r.machineryFee,'#5b8def'],
+    ['管理及利润',r.profitFee,'#b07cc6']
+  ];
+  const hasAny=items.some(x=>num(x[1])>0);
+  const total=items.reduce((a,x)=>a+num(x[1]),0);
+  const bars=items.map(([lab,v,c])=>{
+    const n=num(v),pctV=total>0?n/total*100:0;
+    return `<div class="fee-bar-item">
+      <span class="fee-lab">${lab}</span>
+      <div class="fee-bar-track"><div class="fee-bar-fill" style="width:${pctV}%;background:${c}"></div></div>
+      <span class="fee-val num">¥ ${fmt(n)}</span>
+      <span class="fee-pct num">${pctV.toFixed(1)}%</span>
+    </div>`}).join('');
+  let cmpBlock='';
+  if(cmp){
+    cmpBlock=`<div class="fee-cmp-box">
+      <div class="fee-cmp-title">信息价对标</div>
+      <div class="fee-cmp-row"><span>信息价（${esc(cmp.info.period)}）</span><b class="num">¥ ${fmt(cmp.base)} /${esc(r.unit)}</b></div>
+      <div class="fee-cmp-row"><span>${cmp.using==='materialFee'?'材料费（口径一致）':'综合单价（口径代用）'}</span><b class="num">¥ ${fmt(cmp.cmpVal)} /${esc(r.unit)}</b></div>
+      <div class="fee-cmp-row"><span>偏离</span><b class="num ${cmp.dev>0?'dev-up':'dev-down'}">${cmp.dev>0?'+':''}${(cmp.dev*100).toFixed(1)}%</b></div>
+    </div>`;
+  }
+  return `<div class="fee-breakdown-wrap">
+    <div class="fee-breakdown-title">📊 单价分析｜${esc(r.description).slice(0,60)}</div>
+    ${hasAny
+      ? `<div class="fee-breakdown-grid">
+           <div class="fee-bars">${bars}</div>
+           <div class="fee-side">
+             <div class="fee-total-row"><span>综合单价合计</span><b class="num">¥ ${fmt(r.price)}</b></div>
+             <div class="fee-total-row"><span>人材机分项合计</span><b class="num">¥ ${fmt(total)}</b></div>
+             ${Math.abs(total-num(r.price))>0.01?`<div class="fee-warn">分项合计与综合单价差 ¥${fmt(Math.abs(total-num(r.price)))}，可能存在未拆分项</div>`:'<div class="fee-ok">✓ 分项合计与综合单价一致</div>'}
+           </div>
+           ${cmpBlock}
+         </div>`
+      : `<p class="fee-empty">该单价未做人材机拆分。<button type="button" class="btn btn-outline btn-small" data-edit-price="${r.unitPriceId}" style="margin-left:8px">去编辑补录</button></p>
+         ${cmpBlock}`}
+  </div>`;
 }
 
 
@@ -1311,19 +1387,30 @@ async function confirmInfoImport(){
 }
 /* 批量匹配：给所有 matId 为空的信息价跑一轮物料字典匹配 */
 async function autoMatchMaterials(){
-  const ips=await db.infoPrices.where('matId').equals('').or('matId').equals(undefined).toArray();
-  if(!ips.length){toast('所有信息价已匹配，无需操作。');return}
-  const mats=await db.materials.toArray();
-  const updates=[];let matched=0;
-  for(const ip of ips){
-    const cds=matCandidates(ip.name,mats,1);
-    if(cds.length&&cds[0].score>=52){updates.push({infoPriceId:ip.infoPriceId,matId:cds[0].m.matId});matched++}
-  }
-  if(updates.length){
-    await db.infoPrices.bulkPut(updates);
+  const btn=$('#autoMatchBtn');if(btn)btn.disabled=true;
+  try{
+    const all=await db.infoPrices.toArray();
+    const ips=all.filter(x=>!x.matId);
+    if(!ips.length){toast('所有信息价已匹配，无需操作。');return}
+    const mats=await db.materials.toArray();
+    /* 分批处理，每2000条写一次，避免长时间卡死 */
+    const BATCH=2000;let matched=0,processed=0;
+    for(let i=0;i<ips.length;i+=BATCH){
+      const chunk=ips.slice(i,i+BATCH),updates=[];
+      for(const ip of chunk){
+        const cds=matCandidates(ip.name,mats,1);
+        if(cds.length&&cds[0].score>=52){updates.push({infoPriceId:ip.infoPriceId,matId:cds[0].m.matId});matched++}
+        processed++;
+      }
+      if(updates.length)await db.infoPrices.bulkPut(updates);
+      if(btn)btn.textContent=`匹配中 ${processed}/${ips.length}…`;
+      /* 让出主线程，避免UI冻结 */
+      await new Promise(r=>setTimeout(r,0));
+    }
     toast(`批量匹配完成：${ips.length} 条中 ${matched} 条匹配到物料字典。`);
-  } else toast(`${ips.length} 条均未匹配到，请检查物料字典是否完整。`,true);
-  renderInfoLib();
+    renderInfoLib();
+  }catch(e){console.error(e);toast('匹配过程出错：'+e.message,true)}
+  finally{if(btn){btn.disabled=false;btn.textContent='批量匹配物料'}}
 }
 
 /* ---------- 对比计算 ---------- */
