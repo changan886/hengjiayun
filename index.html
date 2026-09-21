@@ -964,7 +964,7 @@ async function renderPrices(){
         <span class="pg-name">${esc(g.label)}${g.mat?`<small class="pg-cat">${esc(g.mat.categoryL1)}·${esc(g.mat.categoryL2)}</small>`:' <span class="tag danger">未归一</span>'}</span>
         <span class="pg-med num">¥ ${fmt(s.med)}<small>/${esc(g.unit||'—')}</small></span>
         <span class="pg-rng num">P25–P75　${fmt(s.p25)} – ${fmt(s.p75)}</span>
-        <span class="pg-n num">${s.n} 条${sup.length?`　<span class="pg-sup">${esc(sup.slice(0,2).join('/'))}</span>`:''}${(()=>{const cs=g.rows.map(x=>x.matId?compareOne(x,_ii.get(x.matId)):null).filter(Boolean);if(!cs.length)return '';const ov=cs.filter(c=>Math.abs(c.dev)>=_set.devThreshold).length;const md=cs.map(c=>c.dev).sort((a,b)=>a-b)[Math.floor(cs.length/2)];return `　<span class="pg-dev ${md>0?'dev-up':'dev-down'}">偏离 ${md>0?'+':''}${(md*100).toFixed(0)}%</span>${ov?`<span class="tag danger">${ov} 超阈</span>`:''}`})()}</span>
+        <span class="pg-n num">${s.n} 条${sup.length?`　<span class="pg-sup">${esc(sup.slice(0,2).join('/'))}</span>`:''}${(()=>{const cs=g.rows.map(x=>x.matId?compareOne(x,_ii.get(x.matId)):null).filter(Boolean);if(!cs.length)return '';const ov=cs.filter(c=>Math.abs(c.dev)>=_set.devThreshold).length;const md=cs.map(c=>c.dev).sort((a,b)=>a-b)[Math.floor(cs.length/2)];const mfN=cs.filter(c=>c.using==='materialFee').length;const tag=mfN===cs.length?'按材料费':mfN>0?'部分有分析':'综合单价';return `　<span class="pg-dev ${md>0?'dev-up':'dev-down'}">${esc(tag)}偏离 ${md>0?'+':''}${(md*100).toFixed(0)}%</span>${ov?`<span class="tag danger">${ov} 超阈</span>`:''}`})()}</span>
         <span class="pg-spark">${sparkline(pts)}</span></summary>
         <div class="scroll-shell"><div class="table-scroll"><table><thead><tr><th>描述（原文）</th><th class="num">单价</th><th>品牌/型号</th><th>供应</th><th>类型</th><th>项目</th><th>来源文件</th></tr></thead><tbody>
         ${g.rows.slice().sort((a,b)=>num(a.price)-num(b.price)).slice(0,300).map(r=>{const p=projects.find(x=>x.projectId===r.projectId),fl=files.find(x=>x.fileId===r.fileId);
@@ -993,11 +993,12 @@ async function renderPrices(){
     const cmp=r.matId?compareOne(r,_ii.get(r.matId)):null;
     const over=cmp&&Math.abs(cmp.dev)>=_set.devThreshold;
     const infoCell=!cmp?'<small class="mat-tag none">未对照</small>'
-      :`¥ ${fmt(cmp.base)}<br><small class="mat-tag${cmp.exact?'':' none'}">${esc(cmp.info.period)}${cmp.exact?'':' 近期'}${cmp.aligned?'':' 口径代用'}</small>`;
+      :`¥ ${fmt(cmp.base)}<br><small class="mat-tag${cmp.exact?'':' none'}">${esc(cmp.info.period)}${cmp.exact?'':' 近期'}${cmp.aligned?'':' 口径代用'}</small>`
+        +(cmp.using==='materialFee'?`<br><small class="mat-tag" style="color:var(--jade)">对标：材料费 ¥${fmt(cmp.cmpVal)}</small>`:'');
     const devCell=!cmp?'—'
       :`<b class="${cmp.dev>0?'dev-up':'dev-down'}">${cmp.dev>0?'+':''}${(cmp.dev*100).toFixed(1)}%</b>`
         +(over?' <span class="tag danger">超阈值</span>':'')
-        +(cmp.cal.ok?'':`<br><small class="cal-warn">${esc(cmp.cal.note)}</small>`);
+        +(cmp.cal.ok?`<br><small class="mat-tag">${cmp.using==='materialFee'?'按材料费对标':'纯材料单价'}</small>`:`<br><small class="cal-warn">${esc(cmp.cal.note)}</small>`);
     return `<tr class="${over?'row-over':''}"><td>${esc(r.specialty)}</td><td>${esc(r.itemCode||'—')}</td>
       <td>${esc(r.description).slice(0,100)}${mn?`<br><small class="mat-tag">→ ${esc(mn)}</small>`:'<br><small class="mat-tag none">未归一</small>'}</td>
       <td class="num editable${edited(r,'price')}" data-edit-price="${r.unitPriceId}">¥ ${fmt(r.price)} ${pencil}</td>
@@ -1302,12 +1303,17 @@ async function confirmInfoImport(){
 }
 
 /* ---------- 对比计算 ---------- */
+/* 对比逻辑分两层：
+   1. 有单价分析（materialFee>0）→ 材料费 vs 信息价，口径一致，直接对比
+   2. 无单价分析 → 综合单价 vs 信息价，口径不一致，仅供参考，只能看"材料大概是什么水平" */
 function calibreOf(up){
-  const hasLabor=num(up.laborFee)>0||num(up.machineryFee)>0;
-  if(hasLabor)return{ok:false,note:'综合单价含人工机械，只可比材料部分'};
+  const mf=num(up.materialFee);
+  if(mf>0)return{ok:true,note:'',using:'materialFee'};       /* 有材料费，口径对齐，可对标 */
   if(['合同清单','中标价','结算价','投标报价'].includes(up.priceType||''))
-    return{ok:false,note:'清单综合单价口径，含人工与措施，不宜直接比'};
-  return{ok:true,note:''};
+    return{ok:false,note:'综合单价（无单价分析），含人工与措施，仅供参考',using:'price'};
+  if(num(up.laborFee)>0||num(up.machineryFee)>0)
+    return{ok:false,note:'单价含人工机械但无明确材料费拆分，仅供参考',using:'price'};
+  return{ok:true,note:'',using:'price'};                       /* 纯材料单价 */
 }
 function pickInfo(list,period){
   if(!list||!list.length)return null;
@@ -1325,8 +1331,11 @@ function compareOne(up,list){
   const alt=wantTax?num(r.priceNoTax):num(r.priceTax);
   const base=want>0?want:alt;
   if(!base)return null;
+  const cal=calibreOf(up);
+  const cmpVal=cal.using==='materialFee'?num(up.materialFee):num(up.price);
+  if(!cmpVal)return null;
   return{info:r,base,exact:hit.exact,aligned:want>0,
-    wantTax,dev:(num(up.price)-base)/base,cal:calibreOf(up)};
+    wantTax,dev:(cmpVal-base)/base,cal,using:cal.using,cmpVal};
 }
 async function infoIndex(){
   const all=await db.infoPrices.toArray(),by=new Map();
