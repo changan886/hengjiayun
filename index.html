@@ -861,43 +861,121 @@ async function showPricePreview(name){
   bindConfirm('price');
   openModal('previewModal');
 }
+/* ---- 物料表单统一模板（自定义物料 / 编辑物料共用，字段与标准物料完全一致） ---- */
+async function matFormOptions(){
+  const allMats=await db.materials.toArray();
+  return {
+    cat1:[...new Set(allMats.map(m=>m.categoryL1).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh')),
+    cat2:[...new Set(allMats.map(m=>m.categoryL2).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh')),
+    unit:[...new Set(allMats.map(m=>m.stdUnit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'))
+  };
+}
+/* 渲染物料表单字段。v = 预填值；select 允许手填新值（list + datalist） */
+function matFormFields(o,v){
+  v=v||{};
+  const dl=(id,arr)=>`<datalist id="${id}">${arr.map(x=>`<option value="${esc(x)}">`).join('')}</datalist>`;
+  const combobox=(name,label,arr,val)=>
+    `<div class="field"><label for="m-${name}">${label}</label>
+      <input id="m-${name}" name="${name}" list="dl-${name}" value="${esc(val||'')}" placeholder="选择或输入新值">
+    </div>`;
+  return dl('dl-categoryL1',o.cat1)+dl('dl-categoryL2',o.cat2)+dl('dl-stdUnit',o.unit)+
+    `<div class="field full"><label for="m-stdName">物料名称 <span style="color:var(--danger)">*</span></label>
+      <input id="m-stdName" name="stdName" value="${esc(v.stdName||'')}" placeholder="标准物料名称"></div>`+
+    combobox('categoryL1','一级分类',o.cat1,v.categoryL1)+
+    combobox('categoryL2','二级分类',o.cat2,v.categoryL2)+
+    combobox('stdUnit','标准单位',o.unit,v.stdUnit)+
+    `<div class="field"><label for="m-spec">规格型号</label>
+      <input id="m-spec" name="spec" value="${esc(v.spec||'')}" placeholder="如 Q235 / C30"></div>
+     <div class="field"><label for="m-aliases">别名（逗号分隔）</label>
+      <input id="m-aliases" name="aliases" value="${esc(v.aliases||'')}" placeholder="多个别名用逗号隔开"></div>`;
+}
+function collectMatForm(v){
+  const name=(v.stdName||'').trim();
+  const cat1=(v.categoryL1||'').trim(),cat2=(v.categoryL2||'').trim(),
+        unit=(v.stdUnit||'').trim(),spec=(v.spec||'').trim();
+  const aliases=(v.aliases||'').split(/[,，]/).map(s=>s.trim()).filter(Boolean);
+  return {name,cat1,cat2,unit,spec,aliases,keys:[name,...aliases].filter(Boolean)};
+}
 async function openCustomMatForm(gidx){
   const g=state.pendingGroups[gidx];if(!g)return;
-  /* 从已有物料中提取分类和单位的候选值 */
-  const allMats=await db.materials.toArray();
-  const cat1Opts=[...new Set(allMats.map(m=>m.categoryL1).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
-  const cat2Opts=[...new Set(allMats.map(m=>m.categoryL2).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
-  const unitOpts=[...new Set(allMats.map(m=>m.stdUnit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
-  const mkOpts=arr=>'<option value="">请选择</option>'+arr.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  const o=await matFormOptions();
   openForm('新建自定义物料',
-    field('stdName','物料名称',g.raw)+
-    field('categoryL1','一级分类','',cat1Opts.length?'select':'','')+
-    field('categoryL2','二级分类','',cat2Opts.length?'select':'','')+
-    field('stdUnit','标准单位','',unitOpts.length?'select':'','')+
-    field('spec','规格型号','')+
-    field('aliases','别名（逗号分隔）',g.raw),
+    matFormFields(o,{stdName:g.raw,aliases:g.raw}),
     async v=>{
-      if(!v.stdName||!v.stdName.trim()){toast('请输入物料名称。',true);return}
+      const f=collectMatForm(v);
+      if(!f.name){toast('请输入物料名称。',true);return}
       const matId='mat-'+Date.now();
-      const name=v.stdName.trim();
-      const cat1=v.categoryL1||'',cat2=v.categoryL2||'',unit=v.stdUnit||'',spec=v.spec||'';
-      const aliases=v.aliases?v.aliases.split(/[,，]/).map(s=>s.trim()).filter(Boolean):[];
-      const keys=[name,...aliases].filter(Boolean);
-      await db.materials.add({matId,stdName:name,categoryL1:cat1,categoryL2:cat2,stdUnit:unit,keys:keys,spec:spec,aliases:aliases,builtin:false,hits:0,createdAt:new Date().toISOString()});
+      await db.materials.add({matId,stdName:f.name,categoryL1:f.cat1,categoryL2:f.cat2,
+        stdUnit:f.unit,keys:f.keys,spec:f.spec,aliases:f.aliases,
+        builtin:false,hits:0,createdAt:new Date().toISOString()});
       g.matId=matId;g.manual=true;
-      toast(`已创建物料「${name}」并归一。`);
+      /* 立即检查信息价库有没有该物料的基准价 */
+      const infoN=await db.infoPrices.where('matId').equals(matId).count();
+      if(infoN>0){
+        toast(`已创建物料「${f.name}」，信息价库有 ${infoN} 条基准价可对比。`);
+      }else{
+        /* 信息价没有对应记录：尝试在已有信息价中按名称找候选，提示用户 */
+        const allInfo=await db.infoPrices.toArray();
+        const sameName=allInfo.filter(ip=>normKey(ip.name)===normKey(f.name)).slice(0,8);
+        let msg=`已创建物料「${f.name}」，但信息价库暂无对应基准价，暂时无法对比。`;
+        state._newMatNoInfo={matId,name:f.name,sameName};
+        if(sameName.length){
+          msg=`已创建「${f.name}」。信息价库有 ${sameName.length} 条同名记录未关联，可一键关联用于对比。`;
+          setTimeout(()=>offerLinkInfoSameName(),300);
+        }else{
+          setTimeout(()=>offerImportInfoFor(f.name),300);
+        }
+        toast(msg,true);
+      }
       showPricePreview(state.parseFileName);
     }
   );
-  /* 延迟填充自定义 select 选项（openForm 渲染后） */
-  setTimeout(()=>{
-    const sels=document.querySelectorAll('#genericForm select');
-    sels.forEach(sel=>{
-      if(sel.name==='categoryL1'&&cat1Opts.length){sel.innerHTML=mkOpts(cat1Opts)}
-      if(sel.name==='categoryL2'&&cat2Opts.length){sel.innerHTML=mkOpts(cat2Opts)}
-      if(sel.name==='stdUnit'&&unitOpts.length){sel.innerHTML=mkOpts(unitOpts)}
-    });
-  },100);
+}
+/* 信息价里有同名但未关联的记录 → 询问是否批量关联到新物料 */
+function offerLinkInfoSameName(){
+  const {matId,name,sameName}=state._newMatNoInfo||{};if(!matId)return;
+  openManager(`关联信息价｜${name}`,
+    `<p>信息价库中有 <b>${sameName.length}</b> 条同名记录尚未关联到物料字典。关联后即可用于价格对比。</p>
+     <div class="table-scroll"><table><thead><tr><th>期号</th><th>名称</th><th>规格</th><th class="num">含税价</th></tr></thead><tbody>
+     ${sameName.map(ip=>`<tr><td>${esc(ip.period)}</td><td>${esc(ip.name)}</td><td>${esc(ip.spec||'—')}</td><td class="num">¥${fmt(ip.priceTax)}</td></tr>`).join('')}
+     </tbody></table></div>
+     <p style="margin-top:10px">是否把这些记录全部关联到新物料「${esc(name)}」？</p>`,
+    ()=>{
+      /* openManager 没有保存按钮，加两个操作按钮 */
+      const foot=document.createElement('div');foot.style.cssText='margin-top:14px;display:flex;gap:10px;justify-content:flex-end';
+      const b1=document.createElement('button');b1.className='btn btn-outline';b1.textContent='暂不关联';
+      const b2=document.createElement('button');b2.className='btn btn-primary';b2.textContent='全部关联';
+      b1.onclick=()=>closeModals(true);
+      b2.onclick=async()=>{
+        for(const ip of sameName)await db.infoPrices.update(ip.infoPriceId,{matId});
+        closeModals(true);toast(`已关联 ${sameName.length} 条信息价到「${name}」。`);
+        renderInfoLib();renderPrices();
+      };
+      foot.append(b1,b2);
+      setTimeout(()=>{const mb=$('#modalBody');if(mb)mb.parentElement.append(foot)},50);
+    }
+  );
+}
+/* 信息价里完全没有该物料 → 提示导入信息价 */
+function offerImportInfoFor(name){
+  openManager('信息价缺失',
+    `<div style="padding:8px 4px">
+      <p>物料「<b>${esc(name)}</b>」在信息价库中没有对应记录，新增后暂时没有可对比的基准价。</p>
+      <p style="color:#666;font-size:13px;margin-top:8px">你可以：</p>
+      <ul style="margin:8px 0 0 18px;color:#555;font-size:13px;line-height:1.9">
+        <li>点「导入信息价」上传含该材料的官方信息价表，系统会自动匹配</li>
+        <li>或用「网络同步」从造价信息发布网站拉取</li>
+        <li>也可以保留该物料，等后续信息价更新后再对比</li>
+      </ul>
+    </div>`,
+    ()=>{
+      const foot=document.createElement('div');foot.style.cssText='margin-top:14px;display:flex;gap:10px;justify-content:flex-end';
+      const b1=document.createElement('button');b1.className='btn btn-outline';b1.textContent='知道了';
+      b1.onclick=()=>closeModals(true);
+      foot.append(b1);
+      setTimeout(()=>{const mb=$('#modalBody');if(mb)mb.parentElement.append(foot)},50);
+    }
+  );
 }
 async function confirmPriceImportEnhanced(){
   const groups=state.pendingGroups||[],byKey=new Map(groups.map(g=>[g.key,g]));
