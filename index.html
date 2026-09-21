@@ -1462,12 +1462,76 @@ async function exportInfoPrices(){
 }
 
 /* ---------- 信息价网络同步 ---------- */
+/* ---------- 信息价 PDF 解析 ---------- */
+/* 用 pdf.js 提取文本项及坐标，按 Y 聚行、按 X 排列，输出 grid 格式 */
+async function parsePdfToGrid(file){
+  const mod=await import('./assets/pdf.min.mjs');
+  const pdf=await mod.getDocument({data:await file.arrayBuffer(),disableWorker:true}).promise;
+  const allRows=[];
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const content=await page.getTextContent();
+    const items=content.items.filter(it=>it.str&&it.str.trim());
+    /* 按 Y 坐标聚类为行（容差 3pt），行内按 X 排序 */
+    const rowMap=new Map();
+    for(const it of items){
+      const y=Math.round(it.transform[5]);
+      if(!rowMap.has(y))rowMap.set(y,[]);
+      rowMap.get(y).push({x:Math.round(it.transform[4]),text:it.str.trim()});
+    }
+    const sortedYs=[...rowMap.keys()].sort((a,b)=>b-a); /* PDF 坐标系 Y 轴向上，需要倒序 */
+    for(const y of sortedYs){
+      const cells=rowMap.get(y).sort((a,b)=>a.x-b.x);
+      /* 合并距离过近(<8pt)的文本片段为同一单元格 */
+      const merged=[cells[0].text];
+      for(let i=1;i<cells.length;i++){
+        const prev=cells[i-1],cur=cells[i];
+        if(cur.x-prev.x-prev.text.length*5<8){
+          merged[merged.length-1]+=' '+cur.text;
+        }else{
+          merged.push(cur.text);
+        }
+      }
+      if(merged.some(c=>c.trim()))allRows.push(merged);
+    }
+  }
+  return allRows;
+}
+async function parseInfoPdfFile(file){
+  if(!file)return;
+  if(!/\.pdf$/i.test(file.name)){toast('请上传 PDF 文件。',true);return}
+  toast('正在解析 PDF，请稍候…');
+  let grid;
+  try{grid=await parsePdfToGrid(file)}catch(e){console.error(e);toast('PDF 解析失败，请确认不是加密或损坏的文件。',true);return}
+  if(!grid||grid.length<2){toast('PDF 中未识别到有效表格内容。',true);return}
+  const set=await getSet();
+  const guess=normPeriod(file.name)||'';
+  const ask=await askInfoMeta(file.name,set,guess);
+  if(!ask)return;
+  await setSet('lastSource',ask.source);
+  const det=detectInfoHeader(grid);
+  if(!det){toast('未能自动识别表头，请改用 Excel 格式或通过「导入信息价」手动映射。',true);return}
+  const res=applyInfoMap(grid,det,{...ask,sheet:'PDF',chapter:ask.chapter||''});
+  if(!res.rows.length){toast('未从 PDF 识别到有效的名称与价格。',true);return}
+  await showInfoPreview(file.name,res.rows,res.stat);
+}
+/* ---------- 信息价网络同步 ---------- */
 const CORS_PROXY='https://api.allorigins.win/raw?url=';
 async function openSyncManager(){
   const readUrls=async()=>{const r=await db.settings.get('infoSyncUrls');return r?JSON.parse(r.value):[]};
   let urls=await readUrls();
   const render=()=>{
-    $('#syncBody').innerHTML=`<p style="color:var(--muted);font-size:13px;margin-bottom:12px">添加信息价发布网页地址，点击「全部拉取」自动抓取。由于浏览器跨域限制，部分网站可能无法直接访问，此时请下载文件后手动导入。</p>
+    $('#syncBody').innerHTML=`<div style="margin-bottom:16px">
+      <label style="font-size:13px;font-weight:700;display:block;margin-bottom:8px">📄 上传本地 PDF 直接解析导入</label>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:8px">支持文字型 PDF 信息价文件（扫描件不支持），解析后直接进入预览确认流程。</p>
+      <input type="file" id="syncPdfInput" accept=".pdf" style="display:none">
+      <button class="btn btn-primary" id="syncPdfUploadBtn" style="width:100%">📁 选择 PDF 文件并解析</button>
+      <div id="syncPdfResult" style="margin-top:8px"></div>
+    </div>
+    <div style="border-top:1px solid var(--line);padding-top:12px;margin-bottom:12px">
+      <label style="font-size:13px;font-weight:700;display:block;margin-bottom:8px">🌐 从网页抓取文件链接</label>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:8px">添加信息价发布网页地址，点击「全部拉取」自动抓取页面中的 Excel/CSV/PDF 文件链接。PDF 链接会直接解析导入。</p>
+    </div>
     <div style="display:grid;gap:8px">${urls.length?urls.map((u,i)=>`<div style="display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:#fbfdfc">
       <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px" title="${esc(u)}">${esc(u)}</span>
       <button class="btn btn-small btn-outline sync-fetch-one" data-idx="${i}">拉取</button>
@@ -1481,24 +1545,56 @@ async function openSyncManager(){
     $$('.sync-fetch-one').forEach(b=>b.onclick=()=>fetchSyncUrl(urls[+b.dataset.idx],+b.dataset.idx));
     $('#syncUrlAdd').onclick=async()=>{const v=$('#syncUrlInput').value.trim();if(!v)return;if(!/^https?:\/\//.test(v)){toast('请输入以 http:// 或 https:// 开头的地址。',true);return}urls.push(v);await db.settings.put({key:'infoSyncUrls',value:JSON.stringify(urls)});$('#syncUrlInput').value='';render()};
     $('#syncUrlInput').onkeydown=e=>{if(e.key==='Enter')$('#syncUrlAdd').click()};
+    $('#syncPdfUploadBtn').onclick=()=>$('#syncPdfInput').click();
+    $('#syncPdfInput').onchange=async e=>{
+      const file=e.target.files[0];if(!file)return;
+      const resultDiv=$('#syncPdfResult');
+      if(resultDiv)resultDiv.innerHTML='<p style="color:var(--jade)">正在解析 PDF，请稍候…</p>';
+      try{
+        const grid=await parsePdfToGrid(file);
+        if(!grid||grid.length<2){if(resultDiv)resultDiv.innerHTML='<p style="color:var(--red)">PDF 中未识别到有效表格内容，请确认是文字型 PDF（非扫描件）。</p>';return}
+        const set=await getSet();
+        const guess=normPeriod(file.name)||'';
+        const ask=await askInfoMeta(file.name,set,guess);
+        if(!ask){if(resultDiv)resultDiv.innerHTML='';return}
+        await setSet('lastSource',ask.source);
+        const det=detectInfoHeader(grid);
+        if(!det){if(resultDiv)resultDiv.innerHTML='<p style="color:var(--red)">未能自动识别表头，请改用 Excel 格式或通过「导入信息价」手动映射。</p>';return}
+        const res=applyInfoMap(grid,det,{...ask,sheet:'PDF',chapter:ask.chapter||''});
+        if(!res.rows.length){if(resultDiv)resultDiv.innerHTML='<p style="color:var(--red)">未从 PDF 识别到有效的名称与价格数据。</p>';return}
+        if(resultDiv)resultDiv.innerHTML='<p style="color:var(--jade)">✅ PDF 解析成功，请在弹出的预览窗口中确认数据。</p>';
+        await showInfoPreview(file.name,res.rows,res.stat);
+      }catch(err){
+        console.error(err);
+        if(resultDiv)resultDiv.innerHTML='<p style="color:var(--red)">PDF 解析失败：'+esc(err.message)+'。请确认文件不是加密或损坏的扫描件。</p>';
+      }
+    };
     $('#syncFetchAll').onclick=async()=>{
       if(!urls.length){toast('暂未添加同步地址',true);return}
       const res=$('#syncResult');
       let html='<p style="color:var(--muted)">批量拉取中…</p>';
       if(res)res.innerHTML=html;
+      let resultHtml='';
       for(let i=0;i<urls.length;i++){
         if(res)res.innerHTML=`<p style="color:var(--muted)">拉取 ${i+1}/${urls.length}…</p>`;
         try{
           const r=await fetch(CORS_PROXY+encodeURIComponent(urls[i]));
           if(!r.ok)throw new Error('HTTP '+r.status);
           const pg=await r.text();
-          const ls=[...new Set([...pg.matchAll(/href=["'](https?:\/\/[^"']+\.(?:xlsx|xls|csv)[^"']*)["']/gi)].map(m=>m[1]))];
-          if(ls.length){
-            if(res)res.innerHTML+=`<p>来源 ${i+1}：发现 ${ls.length} 个文件：</p><div style="display:grid;gap:4px">${ls.map(l=>`<a href="${esc(l)}" target="_blank" style="font-size:13px;color:var(--jade)">${esc(l)}</a>`).join('')}</div>`;
+          const xlsLinks=[...new Set([...pg.matchAll(/href=["'](https?:\/\/[^"']+\.(?:xlsx|xls|csv)[^"']*)["']/gi)].map(m=>m[1]))];
+          const pdfLinks=[...new Set([...pg.matchAll(/href=["'](https?:\/\/[^"']+\.pdf[^"']*)["']/gi)].map(m=>m[1]))];
+          if(xlsLinks.length){
+            resultHtml+=`<p>来源 ${i+1}：发现 ${xlsLinks.length} 个 Excel/CSV 文件：</p><div style="display:grid;gap:4px">${xlsLinks.map(l=>`<a href="${esc(l)}" target="_blank" style="font-size:13px;color:var(--jade)">📊 ${esc(l)}</a>`).join('')}</div>`;
           }
-        }catch(e){/* skip */}
+          if(pdfLinks.length){
+            resultHtml+=`<p style="margin-top:8px">来源 ${i+1}：发现 ${pdfLinks.length} 个 PDF 文件：</p><div style="display:grid;gap:4px">${pdfLinks.map(l=>`<a href="${esc(l)}" target="_blank" style="font-size:13px;color:var(--jade)">📄 ${esc(l)}</a>`).join('')}</div>`;
+          }
+          if(!xlsLinks.length&&!pdfLinks.length){
+            resultHtml+=`<p style="color:var(--muted)">来源 ${i+1}：未找到可下载的文件链接</p>`;
+          }
+        }catch(e){resultHtml+=`<p style="color:var(--red)">来源 ${i+1}：拉取失败</p>`}
       }
-      if(res)res.innerHTML+=`<p style="margin-top:8px">拉取完成，请点击上方链接下载后通过「导入信息价」入库。</p>`;
+      if(res)res.innerHTML=resultHtml+`<p style="margin-top:8px;color:var(--muted)">提示：Excel/CSV 文件请下载后通过「导入信息价」入库；PDF 文件可直接在上方「上传本地 PDF」区域解析导入。</p>`;
     };
   };
   render();openModal('syncModal');
@@ -1509,17 +1605,31 @@ async function fetchSyncUrl(url,idx){
     const r=await fetch(CORS_PROXY+encodeURIComponent(url));
     if(!r.ok)throw new Error('HTTP '+r.status);
     const html=await r.text();
-    const links=[...new Set([...html.matchAll(/href=["'](https?:\/\/[^"']+\.(?:xlsx|xls|csv)[^"']*)["']/gi)].map(m=>m[1]))];
-    if(links.length){
-      toast(`发现 ${links.length} 个文件链接，请点击链接下载后手动导入。`,false);
-      if(res)res.innerHTML=`<p>发现以下文件链接，请点击下载后通过「导入信息价」入库：</p><div style="display:grid;gap:4px">${links.map(l=>`<a href="${esc(l)}" target="_blank" style="font-size:13px;color:var(--jade)">${esc(l)}</a>`).join('')}</div>`;
-    } else {
-      toast('页面中未找到 Excel/CSV 文件链接。请手动下载后导入。',true);
-      if(res)res.innerHTML='<p>未找到可直接下载的文件链接。请手动下载信息价文件后，通过「导入信息价」按钮入库。</p>';
+    const xlsLinks=[...new Set([...html.matchAll(/href=["'](https?:\/\/[^"']+\.(?:xlsx|xls|csv)[^"']*)["']/gi)].map(m=>m[1]))];
+    const pdfLinks=[...new Set([...html.matchAll(/href=["'](https?:\/\/[^"']+\.pdf[^"']*)["']/gi)].map(m=>m[1]))];
+    let resultHtml='';
+    if(xlsLinks.length){
+      resultHtml+=`<p>来源 ${idx+1}：发现 ${xlsLinks.length} 个 Excel/CSV 文件：</p><div style="display:grid;gap:4px">${xlsLinks.map(l=>`<a href="${esc(l)}" target="_blank" style="font-size:13px;color:var(--jade)">📊 ${esc(l)}</a>`).join('')}</div>`;
+    }
+    if(pdfLinks.length){
+      resultHtml+=`<p style="margin-top:8px">来源 ${idx+1}：发现 ${pdfLinks.length} 个 PDF 文件：</p><div style="display:grid;gap:4px">${pdfLinks.map(l=>`<a href="${esc(l)}" target="_blank" style="font-size:13px;color:var(--jade)">📄 ${esc(l)}</a>`).join('')}</div>`;
+    }
+    if(!xlsLinks.length&&!pdfLinks.length){
+      resultHtml+=`<p style="color:var(--muted)">来源 ${idx+1}：未找到可下载的文件链接</p>`;
+    }
+    if(res)res.innerHTML=resultHtml;
+    if(xlsLinks.length&&!pdfLinks.length){
+      toast(`发现 ${xlsLinks.length} 个 Excel/CSV 文件链接，请下载后导入。`,false);
+    }else if(pdfLinks.length&&!xlsLinks.length){
+      toast(`发现 ${pdfLinks.length} 个 PDF 文件链接，可下载后在上方「上传本地 PDF」区域解析。`,false);
+    }else if(xlsLinks.length&&pdfLinks.length){
+      toast(`发现 ${xlsLinks.length+pdfLinks.length} 个文件链接。`,false);
+    }else{
+      toast('页面中未找到文件链接。请手动下载后导入。',true);
     }
   }catch(e){
     toast('网络拉取失败（可能受跨域限制）。请手动下载文件后导入。',true);
-    if(res)res.innerHTML=`<p style="color:var(--red)">拉取失败：${esc(e.message)}</p><p style="font-size:13px">浏览器直接访问外部网站受跨域策略限制。请手动下载信息价文件，再通过「导入信息价」按钮导入。</p>`;
+    if(res)res.innerHTML=`<p style="color:var(--red)">拉取失败：${esc(e.message)}</p><p style="font-size:13px">浏览器直接访问外部网站受跨域策略限制。请手动下载信息价文件，再通过上方功能导入。</p>`;
   }
 }
 
